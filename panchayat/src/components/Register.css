@@ -1,0 +1,38 @@
+.signup-btn {
+    width: 100%;
+    padding: 10px;
+    background: #007bff;
+    color: #fff;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .signup-btn:hover {
+    background: #0056b3;
+  }
+  
+  .signup-option {
+    margin-top: 20px;
+    color: #555;
+  }
+  .login-form .MuiTextField-root {
+    margin-bottom: 10px; /* Reduce spacing between text fields */
+  }
+  .alternative-signup {
+    text-align: center;
+    margin: 15px 0;
+    font-size: 0.9rem;
+    color: #555;
+  }
+  
+  .social-icons button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    text-transform: none;
+  }
+  
