@@ -31,7 +31,7 @@ const Login = () => {
       console.log("Login successful:", response.data);
 
       // Redirect or handle successful login
-      window.location.href = "/admindashboard"; // Update with your dashboard route
+      window.location.href = "/userdashboard"; // Update with your dashboard route
     } catch (err) {
       console.error("Login error:", err);
       setError(err.response?.data?.message || "Login failed. Please try again.");
