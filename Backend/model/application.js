@@ -5,6 +5,7 @@ const ApplicationSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   status: { type: String, enum: ["Pending", "Approved", "Rejected"], default: "Pending" },
   remarks: { type: String },
+  documents: [String], 
   createdAt: { type: Date, default: Date.now },
 });
 
