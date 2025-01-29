@@ -1,44 +1,110 @@
-import { useState } from "react";
-import { AppBar, Toolbar, Typography, Avatar, IconButton, InputBase, Box, Drawer, List, ListItem, ListItemIcon, ListItemText, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, MenuItem } from "@mui/material";
-import { AddBox, Edit, Delete, Visibility, Logout, Search, AdminPanelSettings } from "@mui/icons-material";
+import { useState, useEffect } from "react";
+import {
+  AppBar,
+  Avatar,
+  Toolbar,
+  Typography,
+  IconButton,
+  Box,
+  Drawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+   TextField,
+  MenuItem,
+  InputBase,
+  CircularProgress,
+} from "@mui/material";
+import {
+  Edit,
+  Delete,
+  Visibility,
+  Search,
+  AdminPanelSettings,
+  Logout,
+} from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import CreateService from "./Createservice";
+
 const drawerWidth = 240;
 
-// Sample data for services and applications
-const initialServices = [
-  { id: 1, name: "Water Supply", description: "Water supply service for villages." },
-  { id: 2, name: "Road Maintenance", description: "Repairing damaged village roads." }
-];
-
-const initialApplications = [
-  { id: 1, applicant: "John Doe", service: "Water Supply", status: "Pending" },
-  { id: 2, applicant: "Jane Smith", service: "Road Maintenance", status: "Approved" }
-];
-
 const AdminDashboard = () => {
-  const [selectedSection, setSelectedSection] = useState("Create Service");
-  const [services, setServices] = useState(initialServices);
-  const [applications, setApplications] = useState(initialApplications);
+  const [selectedSection, setSelectedSection] = useState("Service List");
+  const [services, setServices] = useState([]);
+  const [applications, setApplications] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
-  const navigate=useNavigate();
-  // Handlers
+  // Fetch Services and Applications
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const servicesRes = await fetch("http://localhost:5000/api/services");
+        const servicesData = await servicesRes.json();
+        setServices(servicesData);
+
+        const applicationsRes = await fetch("http://localhost:5000/api/applications");
+        const applicationsData = await applicationsRes.json();
+        setApplications(applicationsData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const handleNavigation = (section) => {
     setSelectedSection(section);
   };
+
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    navigate('/');
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/");
   };
 
-  const handleDeleteService = (id) => {
-    setServices(services.filter(service => service.id !== id));
+  const handleDeleteService = async (id) => {
+    try {
+      await fetch(`http://localhost:5000/api/services/${id}`, { method: "DELETE" });
+      setServices((prev) => prev.filter((service) => service._id !== id));
+    } catch (error) {
+      console.error("Error deleting service:", error);
+    }
   };
 
-  const handleUpdateStatus = (id, newStatus) => {
-    setApplications(applications.map(app => app.id === id ? { ...app, status: newStatus } : app));
+  const handleUpdateStatus = async (id, newStatus) => {
+    try {
+      await fetch(`http://localhost:5000/api/applications/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: newStatus }),
+      });
+
+      setApplications((prev) =>
+        prev.map((app) => (app._id === id ? { ...app, status: newStatus } : app))
+      );
+    } catch (error) {
+      console.error("Error updating status:", error);
+    }
   };
+
+  if (loading) {
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 5 }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -58,33 +124,46 @@ const AdminDashboard = () => {
       >
         <Toolbar />
         <List>
-          <ListItem button onClick={() => handleNavigation("Create Service")}>
-            <ListItemIcon><AddBox sx={{ color: "white" }} /></ListItemIcon>
-            <ListItemText primary="Create Service" />
-          </ListItem>
           <ListItem button onClick={() => handleNavigation("Service List")}>
-            <ListItemIcon><Visibility sx={{ color: "white" }} /></ListItemIcon>
+            <ListItemIcon>
+              <Visibility sx={{ color: "white" }} />
+            </ListItemIcon>
             <ListItemText primary="Service List" />
           </ListItem>
           <ListItem button onClick={() => handleNavigation("Application List")}>
-            <ListItemIcon><Edit sx={{ color: "white" }} /></ListItemIcon>
+            <ListItemIcon>
+              <Edit sx={{ color: "white" }} />
+            </ListItemIcon>
             <ListItemText primary="Application List" />
           </ListItem>
-                  </List>
+        </List>
       </Drawer>
 
       {/* Main Content */}
       <Box sx={{ flexGrow: 1 }}>
-        {/* Top Navigation Bar */}
-        <AppBar position="static" sx={{ backgroundColor: "#f8f9fa", color: "#333", boxShadow: "none", borderBottom: "1px solid #ddd" }}>
+        <AppBar
+          position="static"
+          sx={{
+            backgroundColor: "#f8f9fa",
+            color: "#333",
+            boxShadow: "none",
+            borderBottom: "1px solid #ddd",
+          }}
+        >
           <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-            {/* Search Bar */}
-            <Box sx={{ display: "flex", alignItems: "center", backgroundColor: "#fff", padding: "5px 10px", borderRadius: "8px", border: "1px solid #ddd" }}>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                backgroundColor: "#fff",
+                padding: "5px 10px",
+                borderRadius: "8px",
+                border: "1px solid #ddd",
+              }}
+            >
               <Search sx={{ color: "#555", marginRight: "5px" }} />
               <InputBase placeholder="Search services..." sx={{ width: "250px" }} />
             </Box>
-
-            {/* Admin Profile & Actions */}
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <Typography sx={{ marginRight: "10px" }}>Admin Panel</Typography>
               <Avatar src="/assets/admin-avatar.png" sx={{ marginRight: "10px" }} />
@@ -98,19 +177,9 @@ const AdminDashboard = () => {
           </Toolbar>
         </AppBar>
 
-        {/* Content Area */}
         <Box sx={{ padding: 3 }}>
           <Typography variant="h5">{selectedSection}</Typography>
 
-          {/* Create Service */}
-          {selectedSection === "Create Service" && (
-  <CreateService
-    onCreate={(newService) => setServices((prevServices) => [...prevServices, newService])}
-  />
-)}
-
-
-          {/* Service List */}
           {selectedSection === "Service List" && (
             <TableContainer component={Paper}>
               <Table>
@@ -122,22 +191,30 @@ const AdminDashboard = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {services.map(service => (
-                    <TableRow key={service.id}>
-                      <TableCell>{service.name}</TableCell>
-                      <TableCell>{service.description}</TableCell>
-                      <TableCell>
-                        <IconButton color="primary"><Edit /></IconButton>
-                        <IconButton color="error" onClick={() => handleDeleteService(service.id)}><Delete /></IconButton>
+                  {services.length > 0 ? (
+                    services.map((service) => (
+                      <TableRow key={service._id}>
+                        <TableCell>{service.name}</TableCell>
+                        <TableCell>{service.description}</TableCell>
+                        <TableCell>
+                          <IconButton color="error" onClick={() => handleDeleteService(service._id)}>
+                            <Delete />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={3} align="center">
+                        No services available
                       </TableCell>
                     </TableRow>
-                  ))}
+                  )}
                 </TableBody>
               </Table>
             </TableContainer>
           )}
 
-          {/* Application List */}
           {selectedSection === "Application List" && (
             <TableContainer component={Paper}>
               <Table>
@@ -146,28 +223,40 @@ const AdminDashboard = () => {
                     <TableCell>Applicant</TableCell>
                     <TableCell>Service</TableCell>
                     <TableCell>Status</TableCell>
+                    <TableCell>Remarks</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {applications.map(app => (
-                    <TableRow key={app.id}>
-                      <TableCell>{app.applicant}</TableCell>
-                      <TableCell>{app.service}</TableCell>
-                      <TableCell>
-                        <TextField
-                          select
-                          value={app.status}
-                          onChange={(e) => handleUpdateStatus(app.id, e.target.value)}
-                          variant="outlined"
-                          size="small"
-                        >
-                          {["Pending", "Approved", "Rejected"].map(status => (
-                            <MenuItem key={status} value={status}>{status}</MenuItem>
-                          ))}
-                        </TextField>
+                  {applications.length > 0 ? (
+                    applications.map((app) => (
+                      <TableRow key={app._id}>
+                        <TableCell>{app.user}</TableCell>
+                        <TableCell>{app.service}</TableCell>
+                        <TableCell>
+                          <TextField
+                            select
+                            value={app.status}
+                            onChange={(e) => handleUpdateStatus(app._id, e.target.value)}
+                            variant="outlined"
+                            size="small"
+                          >
+                            {["Pending", "Approved", "Rejected"].map((status) => (
+                              <MenuItem key={status} value={status}>
+                                {status}
+                              </MenuItem>
+                            ))}
+                          </TextField>
+                        </TableCell>
+                        <TableCell>{app.remarks}</TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={4} align="center">
+                        No applications found
                       </TableCell>
                     </TableRow>
-                  ))}
+                  )}
                 </TableBody>
               </Table>
             </TableContainer>
@@ -177,31 +266,5 @@ const AdminDashboard = () => {
     </Box>
   );
 };
-
-// Create Service Component
-// const CreateService = ({ onCreate }) => {
-//   const [open, setOpen] = useState(false);
-//   const [service, setService] = useState({ name: "", description: "" });
-
-//   return (
-//     <>
-//       <Button variant="contained" color="primary" onClick={() => setOpen(true)}>Add New Service</Button>
-//       <Dialog open={open} onClose={() => setOpen(false)}>
-//         <DialogTitle>Create New Service</DialogTitle>
-//         <DialogContent>
-//           <TextField label="Service Name" fullWidth onChange={(e) => setService({ ...service, name: e.target.value })} />
-//           <TextField label="Description" fullWidth onChange={(e) => setService({ ...service, description: e.target.value })} sx={{ mt: 2 }} />
-//         </DialogContent>
-//         <DialogActions>
-//           <Button onClick={() => setOpen(false)}>Cancel</Button>
-//           <Button onClick={() => { onCreate(service); setOpen(false); }} color="primary">Create</Button>
-//         </DialogActions>
-//       </Dialog>
-//     </>
-//   );
-// };
-// CreateService.propTypes = {
-//   onCreate: PropTypes.func.isRequired,  // Validate onCreate as a required function
-// };
 
 export default AdminDashboard;

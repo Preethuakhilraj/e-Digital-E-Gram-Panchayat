@@ -8,10 +8,6 @@ const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 4000;
 
-// Import routes
-app.use("/api/auth", require("./routes/auth"));
-app.use("/api/services", require("./routes/service"));
-app.use("/api/applications", require("./routes/application"));
 
 // Middleware setup
 app.use(morgan('dev'));
@@ -19,16 +15,20 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // CORS setup
-
-
 app.use(cors({
-  // origin: 'https://lifescape-blogapp-client.vercel.app', // Frontend URL
-  credentials: true, // Allow cookies/auth headers
+  origin: "http://localhost:5173", // Replace with your frontend's URL
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true, // Allow cookies if needed
 }));
-
 
 // Static files
 app.use('/public', express.static(path.join(__dirname, 'public')));
+
+const auth = require('./routes/auth');
+// Import routes
+app.use('/auth', auth);
+app.use("/services", require("./routes/service"));
+app.use("/applications", require("./routes/application"));
 
 // Start the server
 app.listen(port, (err) => {
