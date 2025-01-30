@@ -26,22 +26,24 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-
+  
     try {
+      console.log("Attempting login for:", email);
       const response = await axiosInstance.post("/auth/login", { email, password });
+  
       console.log("Login successful:", response.data);
-
+  
       const { token, user } = response.data;
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
-
-      // Redirect based on user role
-      navigate(`/${response.data.user.role}-dashboard`);
+  
+      navigate(`/${user.role}-dashboard`);
     } catch (err) {
-      console.error("Login error:", err);
+      console.error("Login error response:", err.response?.data || err.message);
       setError(err.response?.data?.message || "Invalid email or password.");
     }
   };
+  
 
   return (
     <Box className="center-wrapper">
