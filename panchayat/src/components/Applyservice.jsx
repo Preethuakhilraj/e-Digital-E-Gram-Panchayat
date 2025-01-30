@@ -137,6 +137,9 @@ const ApplyService = () => {
       {/* Dialog Box for Application */}
       <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="sm">
         <DialogTitle>Apply for {selectedService?.name}</DialogTitle>
+        <Typography style={{ marginLeft: '25px' }}>
+  {selectedService?.description}
+</Typography>
         <DialogContent>
             <TextField
             fullWidth

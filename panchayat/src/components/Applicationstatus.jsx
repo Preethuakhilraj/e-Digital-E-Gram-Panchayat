@@ -42,8 +42,7 @@ const ApplicationStatus = () => {
             <Typography variant="body2">
               <strong>Status:</strong> {app.status}
             </Typography>
-            <Typography variant="body2">
-              <strong>Date Applied:</strong> {new Date(app.createdAt).toLocaleDateString()}
+            <Typography variant="body2"><strong>Date Applied:</strong> {new Date(app.createdAt).toLocaleDateString()}
             </Typography>
           </Box>
         ))

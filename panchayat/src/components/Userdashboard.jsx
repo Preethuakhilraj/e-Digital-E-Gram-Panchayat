@@ -30,7 +30,7 @@ const MainDashboard = () => {
 
   return (
     <Box sx={{ display: "flex", backgroundColor: "#f4f6f9" }}>
-      <Sidebar onNavigate={handleNavigation} />
+      <Sidebar onNavigate={handleNavigation} userProfile={userProfile} />
       <Box sx={{ flexGrow: 1, padding: 3, backgroundColor: "white", borderRadius: "8px", boxShadow: 2 }}>
         <AppBar position="static" sx={{ backgroundColor: "#00796b", color: "white", boxShadow: 3 }}>
           <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
