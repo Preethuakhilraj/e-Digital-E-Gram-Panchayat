@@ -16,12 +16,13 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import "./Login.css";
 import axiosInstance from "./axiosinterceptor";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
+  const navigate=useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -30,11 +31,15 @@ const Login = () => {
       const response = await axiosInstance.post("/auth/login", { email, password });
       console.log("Login successful:", response.data);
 
-      // Redirect or handle successful login
-      window.location.href = "/userdashboard"; // Update with your dashboard route
+      const { token, user } = response.data;
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+
+      // Redirect based on user role
+      navigate(`/${response.data.user.role}-dashboard`);
     } catch (err) {
       console.error("Login error:", err);
-      setError(err.response?.data?.message || "Login failed. Please try again.");
+      setError(err.response?.data?.message || "Invalid email or password.");
     }
   };
 
@@ -53,7 +58,7 @@ const Login = () => {
 
         {/* Right Section */}
         <Box className="login-right">
-          <form className="login-form" onSubmit={handleSubmit}>
+          <form className="login-form" onSubmit={handleSubmit} autoComplete="off">
             {/* Email Field */}
             <TextField
               fullWidth
@@ -104,18 +109,13 @@ const Login = () => {
               variant="contained"
               color="primary"
               type="submit"
-              className="signup-btn"
+              className="login-btn"
             >
               Login
             </Button>
 
-            {/* Alternative Sign-up */}
-            <Typography
-              className="alternative-signup"
-              variant="body2"
-              align="center"
-              marginY={2}
-            >
+            {/* Alternative Login */}
+            <Typography variant="body2" align="center" marginY={2}>
               or Log in with:
             </Typography>
 
@@ -144,12 +144,7 @@ const Login = () => {
             </Grid>
 
             {/* Sign Up Option */}
-            <Typography
-              variant="body2"
-              align="center"
-              mt={3}
-              className="signup-option"
-            >
+            <Typography variant="body2" align="center" mt={3}>
               Don&apos;t have an account?{" "}
               <Link href="/register" underline="hover">
                 Sign up

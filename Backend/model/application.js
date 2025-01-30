@@ -3,10 +3,15 @@ const mongoose = require("mongoose");
 const ApplicationSchema = new mongoose.Schema({
   service: { type: mongoose.Schema.Types.ObjectId, ref: "Service", required: true },
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-  status: { type: String, enum: ["Pending", "Approved", "Rejected"], default: "Pending" },
+  status: { type: String, default: "Pending" },
   remarks: { type: String },
-  documents: [String], 
-  createdAt: { type: Date, default: Date.now },
+  documents: [
+    {
+      name: { type: String, required: true },
+      data: { type: Buffer, required: true }, // Ensure this matches your upload format
+    },
+  ],
 });
+
 
 module.exports = mongoose.model("Application", ApplicationSchema);

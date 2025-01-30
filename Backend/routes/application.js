@@ -4,24 +4,55 @@ const Application = require("../model/application");
 const router = express.Router();
 
 // Apply for Service
-router.post("/apply", async (req, res) => {
-  const {service,user,status,documents,remarks } = req.body;
+const multer = require("multer");
+
+// Configure Multer for file uploads
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+router.post("/apply", upload.array("documents"), async (req, res) => {
+  const { service,user,status,remarks } = req.body;
+console.log(" req",req.body);
+  if (!service || !user) {
+    return res.status(400).json({ error: "Required fields are missing" });
+  }
+
   try {
-    const application = new Application({ service,user,status,documents,remarks });
+    const application = new Application({
+      service,
+      user,
+      status,
+      remarks,
+      documents: req.files.map(file => ({
+        name: file.originalname,
+        data: file.buffer,
+      })),
+    });
+
     await application.save();
-    res.status(200).json({ message: 'Application submitted successfully', application: application });
+    res.status(200).json({ message: "Application submitted successfully", application });
+
   } catch (err) {
-    res.status(500).json({ error: 'Something went wrong', details: err.message });
+    console.error("Error creating application:", err);
+    res.status(500).json({ error: "Something went wrong", details: err.message });
+    console.log(err)
   }
 });
-router.get('/:userId', async (req, res) => {
+
+
+router.get("/:userId", async (req, res) => {
   try {
-    const applications = await Application.find({ userId: req.params.userId });
+    const userId = req.params.userId; 
+    console.log("Fetching applications for user:", userId);
+
+    const applications = await Application.find({ user: userId }).populate("service"); // ✅ Ensure correct field name
     res.status(200).json(applications);
   } catch (err) {
-    res.status(500).json({ error: 'Failed to fetch applications', details: err.message });
+    console.error("Error fetching applications:", err);
+    res.status(500).json({ error: "Failed to fetch applications", details: err.message });
   }
 });
+
 router.get("/", async (req, res) => {
   try {
     const applications = await Application.find();
