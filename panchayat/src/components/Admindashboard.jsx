@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 import {
-  AppBar,
+  Visibility,
+  AssignmentTurnedIn,
+  Logout,
+  DarkMode,
+ } from "@mui/icons-material";
+import {
   Avatar,
   Toolbar,
   Typography,
@@ -20,22 +25,20 @@ import {
   Paper,
   TextField,
   MenuItem,
-  InputBase,
-  CircularProgress,
   Tooltip,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  Divider,
+  Fade,
+  Modal,
+  Backdrop,
 } from "@mui/material";
 import {
   Edit,
   Delete,
-  Visibility,
-  Search,
-  AdminPanelSettings,
-  Logout,
   AddBox,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
@@ -46,8 +49,6 @@ const AdminDashboard = () => {
   const [selectedSection, setSelectedSection] = useState("Service List");
   const [services, setServices] = useState([]);
   const [applications, setApplications] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
   const [openServiceDialog, setOpenServiceDialog] = useState(false);
   const [serviceName, setServiceName] = useState("");
   const [serviceDescription, setServiceDescription] = useState("");
@@ -70,14 +71,23 @@ const AdminDashboard = () => {
         setApplications(applicationsData);
       } catch (error) {
         console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
+      } 
     };
 
     fetchData();
   }, []);
+  const [open, setOpen] = useState(false);
+  const [selectedApp, setSelectedApp] = useState(null);
 
+  const handleOpen = (app) => {
+    setSelectedApp(app);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedApp(null);
+  };
   const handleNavigation = (section) => {
     setSelectedSection(section);
   };
@@ -158,310 +168,319 @@ const AdminDashboard = () => {
   };
 
   const filteredServices = services.filter((service) =>
-    service.name.toLowerCase().includes(searchQuery.toLowerCase())
+    service.name.toLowerCase()
   );
 
-  if (loading) {
-    return (
-      <Box sx={{ display: "flex", justifyContent: "center", mt: 5 }}>
-        <CircularProgress />
-      </Box>
-    );
-  }
-
+ 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box
+      sx={{
+        display: "flex",
+        bgcolor: DarkMode ? "#121212" : "#f8f9fa",
+        minHeight: "100vh",
+      }}
+    >
       {/* Sidebar */}
       <Drawer
-        variant="permanent"
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          "& .MuiDrawer-paper": {
-            width: drawerWidth,
-            boxSizing: "border-box",
-            backgroundColor: "#002b5c",
-            color: "white",
-          },
-        }}
-      >
-        <Toolbar />
-        <List>
-          <ListItem button onClick={() => handleNavigation("Service List")}>
-            <ListItemIcon>
-              <Visibility sx={{ color: "white" }} />
-            </ListItemIcon>
-            <ListItemText primary="Service List" />
-          </ListItem>
-          <ListItem button onClick={() => handleNavigation("Application List")}>
-            <ListItemIcon>
-              <Edit sx={{ color: "white" }} />
-            </ListItemIcon>
-            <ListItemText primary="Application List" />
-          </ListItem>
-        </List>
-      </Drawer>
-
-      {/* Main Content */}
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar
-          position="static"
+  variant="permanent"
+  sx={{
+    width: drawerWidth,
+    flexShrink: 0,
+    "& .MuiDrawer-paper": {
+      width: drawerWidth,
+      boxSizing: "border-box",
+      bgcolor: "#004d40", // Dark green shade
+      color: "white",
+    },
+  }}
+>
+       <Box
           sx={{
-            backgroundColor: "#f8f9fa",
-            color: "#333",
-            boxShadow: "none",
-            borderBottom: "1px solid #ddd",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            mt: 2,
           }}
         >
-          <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                backgroundColor: "#fff",
-                padding: "5px 10px",
-                borderRadius: "8px",
-                border: "1px solid #ddd",
-              }}
-            >
-              <Search sx={{ color: "#555", marginRight: "5px" }} />
-              <InputBase
-                placeholder="Search services..."
-                sx={{ width: "250px" }}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </Box>
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Typography sx={{ marginRight: "10px" }}>Admin Panel</Typography>
-              <Avatar src="/assets/admin-avatar.png" sx={{ marginRight: "10px" }} />
-              <IconButton color="inherit">
-                <AdminPanelSettings />
-              </IconButton>
-              <IconButton color="inherit" onClick={handleLogout}>
-                <Logout />
-              </IconButton>
-            </Box>
-          </Toolbar>
-        </AppBar>
-
-        <Box sx={{ padding: 3 }}>
-          <Typography variant="h5">{selectedSection}</Typography>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => setOpenServiceDialog(true)}
-            startIcon={<AddBox />}
-            sx={{ position: "absolute", top: 80, right: 20, marginBottom: 2 }}
-          >
-            Add New Service
-          </Button>
-
-          {selectedSection === "Service List" && (
-            <TableContainer component={Paper}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Service Name</TableCell>
-                    <TableCell>Description</TableCell>
-                    <TableCell>Actions</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {filteredServices.length > 0 ? (
-                    filteredServices.map((service) => (
-                      <TableRow key={service._id}>
-                        <TableCell>{service.name}</TableCell>
-                        <TableCell>{service.description}</TableCell>
-                        <TableCell>
-                          <Tooltip title="Update Service" arrow>
-                            <IconButton
-                              color="primary"
-                              onClick={() => {
-                                setServiceName(service.name);
-                                setServiceDescription(service.description);
-                                setServiceToEdit(service._id);
-                                setOpenEditServiceDialog(true);
-                              }}
-                            >
-                              <Edit />
-                            </IconButton>
-                          </Tooltip>
-                          <Tooltip title="Delete Service" arrow>
-                            <IconButton
-                              color="error"
-                              onClick={() => {
-                                setServiceToDelete(service._id);
-                                setConfirmDelete(true);
-                              }}
-                            >
-                              <Delete />
-                            </IconButton>
-                          </Tooltip>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  ) : (
-                    <TableRow>
-                      <TableCell colSpan={3} align="center">
-                        No services available
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          )}
-
-          {selectedSection === "Application List" && (
-            <TableContainer component={Paper}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Applicant</TableCell>
-                    <TableCell>Service</TableCell>
-                    <TableCell>Status</TableCell>
-                    <TableCell>Remarks</TableCell>
-                    <TableCell>Actions</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {applications.length > 0 ? (
-                    applications.map((app) => (
-                      <TableRow key={app._id}>
-                        <TableCell>{app.user}</TableCell>
-                        <TableCell>{app.service}</TableCell>
-                        <TableCell>
-                          <TextField
-                            select
-                            value={app.status}
-                            onChange={(e) =>
-                              handleUpdateStatus(app._id, e.target.value, app.remarks)
-                            }
-                            variant="outlined"
-                            size="small"
-                          >
-                            {["Pending", "Approved", "Rejected"].map((status) => (
-                              <MenuItem key={status} value={status}>
-                                {status}
-                              </MenuItem>
-                            ))}
-                          </TextField>
-                        </TableCell>
-                        <TableCell>
-                          <TextField
-                            value={app.remarks}
-                            onChange={(e) =>
-                              handleUpdateStatus(app._id, app.status, e.target.value)
-                            }
-                            variant="outlined"
-                            size="small"
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <Tooltip title="View Application" arrow>
-                            <IconButton color="primary">
-                              <Visibility />
-                            </IconButton>
-                          </Tooltip>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  ) : (
-                    <TableRow>
-                      <TableCell colSpan={5} align="center">
-                        No applications found
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          )}
+          <Avatar
+            src={ "/default-avatar.png"}
+            sx={{ width: 80, height: 80, mb: 1 }}
+          />
+          <Typography variant="h6">Admin Panel</Typography>
         </Box>
-      </Box>
+        <Divider sx={{ bgcolor: "white" }} />
+        <List>
+          {["Services List", "Application List"].map((text) => (
+            <ListItem button key={text} onClick={() => handleNavigation(text)}>
+              <ListItemIcon sx={{ color: "white" }}>
+                {text === " Services List" ? <Visibility /> : <AssignmentTurnedIn />}
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItem>
+          ))}
+          <ListItem button onClick={handleLogout}>
+            <ListItemIcon sx={{ color: "white" }}>
+              <Logout />
+            </ListItemIcon>
+            <ListItemText primary="Logout" />
+          </ListItem>
+        </List>
+        <Toolbar />
+        </Drawer>
 
-      {/* Create Service Dialog */}
-      <Dialog open={openServiceDialog} onClose={() => setOpenServiceDialog(false)}>
-        <DialogTitle>Create New Service</DialogTitle>
-        <DialogContent>
-          <TextField
-            label="Service Name"
-            fullWidth
-            value={serviceName}
-            onChange={(e) => setServiceName(e.target.value)}
-            margin="dense"
-          />
-          <TextField
-            label="Description"
-            fullWidth
-            value={serviceDescription}
-            onChange={(e) => setServiceDescription(e.target.value)}
-            margin="dense"
-            multiline
-            rows={3}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpenServiceDialog(false)} color="secondary">
-            Cancel
-          </Button>
-          <Button onClick={handleCreateService} color="primary">
-            Create
-          </Button>
-        </DialogActions>
-      </Dialog>
+      {/* Main Content */}
+      <Box sx={{ mt: 3 }}>
+  <Typography variant="h5" sx={{ color: "#c9e4d9", marginBottom: 3 }}>
+    {selectedSection}
+  </Typography>
+  <Button
+    variant="contained"
+    color="success"
+    onClick={() => setOpenServiceDialog(true)}
+    startIcon={<AddBox />}
+    sx={{
+      position: "absolute",
+      top: 110,
+      right: 35,
+      marginBottom: 2,
+      flexGrow: 1,
+      padding: 2,
+      marginLeft: `${drawerWidth}px`,
+      backgroundColor: "#388e3c",
+      '&:hover': { backgroundColor: "#2c6c2d" }
+    }}
+  >
+    Add New Service
+  </Button>
 
-      {/* Edit Service Dialog */}
-      <Dialog open={openEditServiceDialog} onClose={() => setOpenEditServiceDialog(false)}>
-        <DialogTitle>Edit Service</DialogTitle>
-        <DialogContent>
-          <TextField
-            label="Service Name"
-            fullWidth
-            value={serviceName}
-            onChange={(e) => setServiceName(e.target.value)}
-            margin="dense"
-          />
-          <TextField
-            label="Description"
-            fullWidth
-            value={serviceDescription}
-            onChange={(e) => setServiceDescription(e.target.value)}
-            margin="dense"
-            multiline
-            rows={3}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpenEditServiceDialog(false)} color="secondary">
-            Cancel
-          </Button>
-          <Button onClick={handleUpdateService} color="primary">
-            Update
-          </Button>
-        </DialogActions>
-      </Dialog>
+  {selectedSection === "Services List" && (
+    <TableContainer component={Paper} sx={{ borderRadius: 2, boxShadow: 3, backgroundColor: "#2c3e50" }}>
+      <Table>
+        <TableHead sx={{ bgcolor: "#2e3b32", color: "#fff" }}>
+          <TableRow>
+            <TableCell sx={{ fontWeight: "bold", color: "#b1c9a7" }}>Service Name</TableCell>
+            <TableCell sx={{ fontWeight: "bold", color: "#b1c9a7" }}>Description</TableCell>
+            <TableCell sx={{ fontWeight: "bold", color: "#b1c9a7" }}>Actions</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {filteredServices.length > 0 ? (
+            filteredServices.map((service) => (
+              <TableRow key={service._id}>
+                <TableCell sx={{ color: "#b1c9a7" }}>{service.name}</TableCell>
+                <TableCell sx={{ color: "#b1c9a7" }}>{service.description}</TableCell>
+                <TableCell>
+                  <Tooltip title="Update Service" arrow>
+                    <IconButton
+                      color="success"
+                      onClick={() => {
+                        setServiceName(service.name);
+                        setServiceDescription(service.description);
+                        setServiceToEdit(service._id);
+                        setOpenEditServiceDialog(true);
+                      }}
+                    >
+                      <Edit />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Delete Service" arrow>
+                    <IconButton
+                      color="error"
+                      onClick={() => {
+                        setServiceToDelete(service._id);
+                        setConfirmDelete(true);
+                      }}
+                    >
+                      <Delete />
+                    </IconButton>
+                  </Tooltip>
+                </TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={3} align="center" sx={{ color: "#d6e1d3" }}>
+                No services available
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  )}
 
-      {/* Delete Service Confirmation */}
-      <Dialog
-        open={confirmDelete}
-        onClose={() => setConfirmDelete(false)}
-      >
-        <DialogTitle>Confirm Delete</DialogTitle>
-        <DialogContent>
-          Are you sure you want to delete this service?
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setConfirmDelete(false)} color="secondary">
-            Cancel
-          </Button>
-          <Button onClick={handleDeleteService} color="error">
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
+  {selectedSection === "Application List" && (
+    <Box p={3}>
+      <Typography variant="h5" sx={{ fontWeight: "bold", mb: 2, color: "#b1c9a7" }}>
+        Application List
+      </Typography>
+
+      <TableContainer component={Paper} sx={{ borderRadius: 2, boxShadow: 3, backgroundColor: "#2c3e50" }}>
+        <Table>
+          <TableHead sx={{ bgcolor: "#2e3b32", color: "#fff" }}>
+            <TableRow>
+              <TableCell sx={{ fontWeight: "bold", color: "#b1c9a7" }}>Applicant</TableCell>
+              <TableCell sx={{ fontWeight: "bold", color: "#b1c9a7" }}>Service</TableCell>
+              <TableCell sx={{ fontWeight: "bold", color: "#b1c9a7" }}>Status</TableCell>
+              <TableCell sx={{ fontWeight: "bold", color: "#b1c9a7" }}>Remarks</TableCell>
+              <TableCell sx={{ fontWeight: "bold", color: "#b1c9a7", textAlign: "center" }}>Actions</TableCell>
+            </TableRow>
+          </TableHead>
+
+          <TableBody>
+            {applications.length > 0 ? (
+              applications.map((app) => (
+                <TableRow key={app._id} hover>
+                  <TableCell sx={{ color: "#b1c9a7" }}>{app.userName}</TableCell>
+                  <TableCell sx={{ color: "#b1c9a7" }}>{app.serviceName}</TableCell>
+                  <TableCell>
+                    <TextField
+                      select
+                      value={app.status}
+                      onChange={(e) => handleUpdateStatus(app._id, e.target.value, app.remarks)}
+                      variant="outlined"
+                      size="small"
+                      sx={{ width: 120 }}
+                    >
+                      {["Pending", "Approved", "Rejected"].map((status) => (
+                        <MenuItem key={status} value={status}>
+                          {status}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </TableCell>
+                  <TableCell>
+                    <TextField
+                      value={app.remarks}
+                      onChange={(e) => handleUpdateStatus(app._id, app.status, e.target.value)}
+                      variant="outlined"
+                      size="small"
+                      sx={{ width: "100%" }}
+                    />
+                  </TableCell>
+                  <TableCell align="center">
+                    <Tooltip title="View Application" arrow>
+                      <IconButton color="success" onClick={() => handleOpen(app)}>
+                        <Visibility />
+                      </IconButton>
+                    </Tooltip>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={5} align="center" sx={{ color: "#d6e1d3" }}>
+                  No applications found
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      {/* Modal for Application Details */}
+      <Modal open={open} onClose={handleClose} closeAfterTransition BackdropComponent={Backdrop} BackdropProps={{ timeout: 500 }}>
+        <Fade in={open}>
+          <Box sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "80vw", bgcolor: "#2c3e50", boxShadow: 24, p: 3, borderRadius: 2 }}>
+            <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2, color: "#ffcc00" }}>
+              Application Details
+            </Typography>
+            {selectedApp && (
+              <>
+                <Typography sx={{ color: "#c9e4d9" }}><strong>Applicant:</strong> {selectedApp.userName}</Typography>
+                <Typography sx={{ color: "#c9e4d9" }}><strong>Service:</strong> {selectedApp.serviceName}</Typography>
+                <Typography sx={{ color: "#c9e4d9" }}><strong>Status:</strong> {selectedApp.status}</Typography>
+                <Typography sx={{ color: "#c9e4d9" }}><strong>Remarks:</strong> {selectedApp.remarks || "None"}</Typography>
+              </>
+            )}
+          </Box>
+        </Fade>
+      </Modal>
     </Box>
+  )}
+
+  {/* Create Service Dialog */}
+  <Dialog open={openServiceDialog} onClose={() => setOpenServiceDialog(false)}>
+    <DialogTitle sx={{ backgroundColor: "#388e3c", color: "#fff" }}>Create New Service</DialogTitle>
+    <DialogContent>
+      <TextField
+        label="Service Name"
+        fullWidth
+        value={serviceName}
+        onChange={(e) => setServiceName(e.target.value)}
+        margin="dense"
+        sx={{ bgcolor: "#2c3e50", color: "#c9e4d9", borderRadius: 1 }}
+      />
+      <TextField
+        label="Description"
+        fullWidth
+        value={serviceDescription}
+        onChange={(e) => setServiceDescription(e.target.value)}
+        margin="dense"
+        multiline
+        rows={3}
+        sx={{ bgcolor: "#2c3e50", color: "#c9e4d9", borderRadius: 1 }}
+      />
+    </DialogContent>
+    <DialogActions>
+      <Button onClick={() => setOpenServiceDialog(false)} color="secondary">
+        Cancel
+      </Button>
+      <Button onClick={handleCreateService} color="primary">
+        Create
+      </Button>
+    </DialogActions>
+  </Dialog>
+
+  {/* Edit Service Dialog */}
+  <Dialog open={openEditServiceDialog} onClose={() => setOpenEditServiceDialog(false)}>
+    <DialogTitle sx={{ backgroundColor: "#388e3c", color: "#fff" }}>Edit Service</DialogTitle>
+    <DialogContent>
+      <TextField
+        label="Service Name"
+        fullWidth
+        value={serviceName}
+        onChange={(e) => setServiceName(e.target.value)}
+        margin="dense"
+        sx={{ bgcolor: "#2c3e50", color: "#c9e4d9", borderRadius: 1 }}
+      />
+      <TextField
+        label="Description"
+        fullWidth
+        value={serviceDescription}
+        onChange={(e) => setServiceDescription(e.target.value)}
+        margin="dense"
+        multiline
+        rows={3}
+        sx={{ bgcolor: "#2c3e50", color: "#c9e4d9", borderRadius: 1 }}
+      />
+    </DialogContent>
+    <DialogActions>
+      <Button onClick={() => setOpenEditServiceDialog(false)} color="secondary">
+        Cancel
+      </Button>
+      <Button onClick={handleUpdateService} color="primary">
+        Update
+      </Button>
+    </DialogActions>
+  </Dialog>
+
+  {/* Delete Service Confirmation */}
+  <Dialog open={confirmDelete} onClose={() => setConfirmDelete(false)}>
+    <DialogTitle sx={{ backgroundColor: "#e57373", color: "#fff" }}>Confirm Delete</DialogTitle>
+    <DialogContent sx={{ color: "#c9e4d9" }}>
+      Are you sure you want to delete this service?
+    </DialogContent>
+    <DialogActions>
+      <Button onClick={() => setConfirmDelete(false)} color="secondary">
+        Cancel
+      </Button>
+      <Button onClick={handleDeleteService} color="error">
+        Delete
+      </Button>
+    </DialogActions>
+  </Dialog>
+</Box></Box>
   );
 };
 
