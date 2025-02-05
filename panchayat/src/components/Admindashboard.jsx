@@ -237,9 +237,9 @@ const AdminDashboard = () => {
   </Typography> */}
   
   {selectedSection === "Services List" && (
-  <Box sx={{ padding: 3 }}>
+  <Box sx={{ padding: 3, backgroundColor:" #bfbfbf" ,width:"90vw"}}>
     {/* Header with Button */}
-    <Grid container justifyContent="space-between" alignItems="center" sx={{ marginBottom: 2 }}>
+    <Grid container justifyContent="space-between"  alignItems="center" sx={{ marginBottom: 2 }}>
       <Typography variant="h5" sx={{ fontWeight: "bold", color: "#f8f9fa" }}>
         Services List
       </Typography>
