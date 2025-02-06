@@ -45,8 +45,9 @@ router.get("/:userId", async (req, res) => {
     const userId = req.params.userId; 
     console.log("Fetching applications for user:", userId);
 
-    const applications = await Application.find({ user: userId }).populate("service"); // ✅ Ensure correct field name
-    res.status(200).json(applications);
+    const applications = await 
+    // Application.find({ user: userId }).populate("service"); // ✅ Ensure correct field name
+    Application.find().populate('user', 'name').populate('service', 'name'); res.status(200).json(applications);
   } catch (err) {
     console.error("Error fetching applications:", err);
     res.status(500).json({ error: "Failed to fetch applications", details: err.message });

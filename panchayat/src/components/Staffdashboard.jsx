@@ -2,12 +2,9 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import {
-  AppBar,
-  Toolbar,
-  Typography,
+    Typography,
   Avatar,
   IconButton,
-  InputBase,
   Box,
   Drawer,
   List,
@@ -24,7 +21,6 @@ import {
   TableCell,
   TableBody,
   Tooltip,
-  Switch,
   Stack,
   TextField,
   MenuItem,
@@ -33,10 +29,7 @@ import {
   Visibility,
   AssignmentTurnedIn,
   Logout,
-  Search,
-  DarkMode,
-  LightMode,
-} from "@mui/icons-material";
+ } from "@mui/icons-material";
 
 const drawerWidth = 260;
 
@@ -46,9 +39,7 @@ const StaffDashboard = ({ userProfile }) => {
   const [services, setServices] = useState([]);
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [darkMode, setDarkMode] = useState(false);
-
+ 
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -82,7 +73,6 @@ const StaffDashboard = ({ userProfile }) => {
     navigate("/");
   };
 
-  const handleThemeToggle = () => setDarkMode(!darkMode);
 
   const handleUpdateStatus = (id, status, remarks) => {
     // Update application status logic
@@ -96,7 +86,7 @@ const StaffDashboard = ({ userProfile }) => {
     <Box
       sx={{
         display: "flex",
-        bgcolor: darkMode ? "#121212" : "#f8f9fa",
+        bgcolor: "#f8f9fa",
         minHeight: "100vh",
       }}
     >
@@ -109,7 +99,7 @@ const StaffDashboard = ({ userProfile }) => {
           "& .MuiDrawer-paper": {
             width: drawerWidth,
             boxSizing: "border-box",
-            bgcolor: darkMode ? "#1e1e1e" : "#004d40",
+            bgcolor:  "#004d40",
             color: "white",
           },
         }}
@@ -150,38 +140,11 @@ const StaffDashboard = ({ userProfile }) => {
       {/* Main Content */}
       <Box sx={{ flexGrow: 1, p: 3 }}>
         {/* App Bar */}
-        <AppBar
-          position="static"
-          sx={{
-            bgcolor: darkMode ? "#333" : "#f8f9fa",
-            color: darkMode ? "#fff" : "#333",
-            boxShadow: "none",
-            borderBottom: "1px solid #ddd",
-          }}
-        >
-          <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Search sx={{ color: "#555", mr: 1 }} />
-              <InputBase
-                placeholder="Search services..."
-                sx={{ width: 250 }}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </Box>
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Typography sx={{ mr: 2 }}>Theme</Typography>
-              <Switch checked={darkMode} onChange={handleThemeToggle} />
-              <IconButton color="inherit" onClick={handleThemeToggle}>
-                {darkMode ? <LightMode /> : <DarkMode />}
-              </IconButton>
-            </Box>
-          </Toolbar>
-        </AppBar>
-
+                  
         <Box sx={{ mt: 3 }}>
           <Typography variant="h5" sx={{ mb: 2 }}>
             {selectedSection}
+
           </Typography>
 
           {/* View Services Section */}
@@ -190,11 +153,8 @@ const StaffDashboard = ({ userProfile }) => {
               sx={{
                 p: 3,
                 borderRadius: 3,
-                bgcolor: darkMode ? "#1e1e1e" : "#fff",
-                boxShadow:
-                  darkMode
-                    ? "0px 4px 10px rgba(255,255,255,0.1)"
-                    : "0px 4px 10px rgba(0,0,0,0.1)",
+                bgcolor:  "#fff",
+                boxShadow: "0px 4px 10px rgba(0,0,0,0.1)",     
               }}
             >
               {loading ? (
@@ -209,13 +169,13 @@ const StaffDashboard = ({ userProfile }) => {
                       sx={{
                         p: 2,
                         borderRadius: 2,
-                        bgcolor: darkMode ? "#333" : "#f5f5f5",
+                        bgcolor:  "#f5f5f5",
                         display: "flex",
                         alignItems: "center",
                         gap: 2,
                       }}
                     >
-                      <Avatar sx={{ bgcolor: darkMode ? "#FFD700" : "#47916b" }}>
+                      <Avatar sx={{ bgcolor:  "#47916b" }}>
                         {service.name.charAt(0).toUpperCase()}
                       </Avatar>
                       <Typography variant="h6">{service.name}</Typography>

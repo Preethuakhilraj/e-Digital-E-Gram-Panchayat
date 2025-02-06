@@ -163,7 +163,7 @@ const AdminDashboard = () => {
 
       setApplications((prev) =>
         prev.map((app) => (app._id === id ? { ...app, status: newStatus, remarks: remarks } : app))
-      );
+      ); console.log(applications)
     } catch (error) {
       console.error("Error updating status:", error);
     }
@@ -240,7 +240,7 @@ const AdminDashboard = () => {
   <Box sx={{ padding: 3, backgroundColor:" #bfbfbf" ,width:"90vw"}}>
     {/* Header with Button */}
     <Grid container justifyContent="space-between"  alignItems="center" sx={{ marginBottom: 2 }}>
-      <Typography variant="h5" sx={{ fontWeight: "bold", color: "#f8f9fa" }}>
+      <Typography variant="h5" sx={{ fontWeight: "bold", color: "##000000" }}>
         Services List
       </Typography>
       <Button
@@ -324,22 +324,23 @@ const AdminDashboard = () => {
     </TableContainer>
   </Box>
 )}
-
   {selectedSection === "Application List" && (
-    <Box p={3}>
-      <Typography variant="h5" sx={{ fontWeight: "bold", mb: 2, color: "#b1c9a7" }}>
-        Application List
+  <Box sx={{ padding: 3, backgroundColor:" #bfbfbf" ,width:"90vw"}}>
+    {/* Header with Button */}
+    <Grid container justifyContent="space-between"  alignItems="center" sx={{ marginBottom: 2 }}>
+      <Typography variant="h5" sx={{ fontWeight: "bold", color: "##000000" }}>
+        Services List
       </Typography>
-
-      <TableContainer component={Paper} sx={{ borderRadius: 2, boxShadow: 3, backgroundColor: "#2c3e50" }}>
-        <Table>
-          <TableHead sx={{ bgcolor: "#2e3b32", color: "#fff" }}>
-            <TableRow>
-              <TableCell sx={{ fontWeight: "bold", color: "#b1c9a7" }}>Applicant</TableCell>
-              <TableCell sx={{ fontWeight: "bold", color: "#b1c9a7" }}>Service</TableCell>
-              <TableCell sx={{ fontWeight: "bold", color: "#b1c9a7" }}>Status</TableCell>
-              <TableCell sx={{ fontWeight: "bold", color: "#b1c9a7" }}>Remarks</TableCell>
-              <TableCell sx={{ fontWeight: "bold", color: "#b1c9a7", textAlign: "center" }}>Actions</TableCell>
+         </Grid>
+         <TableContainer component={Paper} sx={{ borderRadius: 3, boxShadow: 4, backgroundColor: "#1b4332" }}>
+      <Table>
+        <TableHead sx={{ bgcolor: "#2d6a4f" }}>
+          <TableRow>
+              <TableCell  sx={{ fontWeight: "bold", color: "#f8f9fa", fontSize: "1rem" }}>Applicant</TableCell>
+              <TableCell  sx={{ fontWeight: "bold", color: "#f8f9fa", fontSize: "1rem" }}>Service</TableCell>
+              <TableCell sx={{ fontWeight: "bold", color: "#f8f9fa", fontSize: "1rem" }}>Status</TableCell>
+              <TableCell sx={{ fontWeight: "bold", color: "#f8f9fa", fontSize: "1rem" }}>Remarks</TableCell>
+              <TableCell sx={{ fontWeight: "bold", color: "#f8f9fa", fontSize: "1rem" }}>Actions</TableCell>
             </TableRow>
           </TableHead>
 
@@ -347,8 +348,8 @@ const AdminDashboard = () => {
             {applications.length > 0 ? (
               applications.map((app) => (
                 <TableRow key={app._id} hover>
-                  <TableCell sx={{ color: "#b1c9a7" }}>{app.userName}</TableCell>
-                  <TableCell sx={{ color: "#b1c9a7" }}>{app.serviceName}</TableCell>
+                  <TableCell sx={{ color: "#f8f9fa" }}>{app.user.name}</TableCell>
+                  <TableCell sx={{ color: "#f8f9fa" }}>{app.service.name}</TableCell>
                   <TableCell>
                     <TextField
                       select
@@ -402,7 +403,7 @@ const AdminDashboard = () => {
               Application Details
             </Typography>
             {selectedApp && (
-              <>
+              <> 
                 <Typography sx={{ color: "#c9e4d9" }}><strong>Applicant:</strong> {selectedApp.userName}</Typography>
                 <Typography sx={{ color: "#c9e4d9" }}><strong>Service:</strong> {selectedApp.serviceName}</Typography>
                 <Typography sx={{ color: "#c9e4d9" }}><strong>Status:</strong> {selectedApp.status}</Typography>
