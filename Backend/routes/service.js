@@ -15,18 +15,7 @@ router.post("/", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-router.get('/:id', async (req, res) => {
-  try {
-    const service = await Service.findById(req.params.id);
-    if (!service) {
-      return res.status(404).json({ message: 'Service not found' });
-    }
-    res.json(service);
-  } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
-  }
-});
-// Get All Services
+
 router.get("/", async (req, res) => {
   try {
     const services = await Service.find();
@@ -35,6 +24,18 @@ router.get("/", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+// router.get('/:id', async (req, res) => {
+//   try {
+//     const service = await Service.findById(req.params.id);
+//     if (!service) {
+//       return res.status(404).json({ message: 'Service not found' });
+//     }
+//     res.json(service);
+//   } catch (error) {
+//     res.status(500).json({ message: 'Server error', error: error.message });
+//   }
+// });
+// Get All Services
 
 // Delete Service
 router.delete("/:id", async (req, res) => {

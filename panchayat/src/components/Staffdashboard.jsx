@@ -239,6 +239,7 @@ const StaffDashboard = ({ userProfile }) => {
   );
 };
 StaffDashboard.propTypes = {
-  userProfile: PropTypes.func.isRequired, // Ensure it's a function and is required
+  userProfile: PropTypes.object.isRequired,
 };
+
 export default StaffDashboard;

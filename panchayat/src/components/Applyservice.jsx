@@ -17,7 +17,7 @@ const ApplyService = () => {
     user: "",
     status: "Pending",
     documents: [],
-    remarks: "",
+    details: "",
   });
 
   const navigate = useNavigate();
@@ -52,7 +52,7 @@ const ApplyService = () => {
       user: user._id,
       status: "Pending",
       documents: [],
-      remarks: "",
+    details: "",
     });
     setOpen(true);
   };
@@ -83,7 +83,7 @@ const ApplyService = () => {
       formData.append("service", applicationData.service);
       formData.append("user", applicationData.user);
       formData.append("status", applicationData.status);
-      formData.append("remarks", applicationData.remarks);
+      formData.append("details", applicationData.details);
 
       // Append files
       applicationData.documents.forEach((file) => {
@@ -143,9 +143,9 @@ const ApplyService = () => {
         <DialogContent>
             <TextField
             fullWidth
-            label="Remarks"
-            name="remarks"
-            value={applicationData.remarks}
+            label="Details"
+            name="details"
+            value={applicationData.details}
             onChange={handleChange}
             margin="dense"
             multiline

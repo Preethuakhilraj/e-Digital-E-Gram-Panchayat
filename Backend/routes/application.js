@@ -40,6 +40,32 @@ console.log(" req",req.body);
 });
 
 
+
+
+router.get("/", async (req, res) => {
+  try {
+    const applications = await Application.find().populate('user', 'name').populate('service', 'name'); res.status(200).json(applications);
+      console.log(applications)
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+// Update Application Status
+router.put("/:id", async (req, res) => {
+  const { status, remarks } = req.body;  // Extract both status and remarks
+
+  try {
+    const application = await Application.findByIdAndUpdate(
+      req.params.id,
+      { status, remarks },  // Update both fields
+      { new: true }         // Return the updated document
+    );
+    res.json(application);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 router.get("/:userId", async (req, res) => {
   try {
     const userId = req.params.userId; 
@@ -53,25 +79,4 @@ router.get("/:userId", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch applications", details: err.message });
   }
 });
-
-router.get("/", async (req, res) => {
-  try {
-    const applications = await Application.find();
-    res.json(applications);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-// Update Application Status
-router.put("/:id", async (req, res) => {
-  const { status } = req.body;
-
-  try {
-    const application = await Application.findByIdAndUpdate(req.params.id, { status }, { new: true });
-    res.json(application);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
 module.exports = router;
