@@ -64,25 +64,23 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const servicesRes = await axiosInstance.get(
-          "http://localhost:4000/services"
-        );
-        const servicesData = await servicesRes.data;
+        // Fetch services
+        const { data: servicesData } = await axiosInstance.get("/services");
         setServices(servicesData);
-
-        const applicationsRes = await axiosInstance.get(
-          "http://localhost:4000/applications"
-        );
-        const applicationsData = await applicationsRes.data;
+  
+        // Fetch applications
+        const { data: applicationsData } = await axiosInstance.get("/applications");
         setApplications(applicationsData);
-        console.log("applications:", applicationsData);
+  
+        console.log("Applications:", applicationsData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-
+  
     fetchData();
   }, []);
+  
   const [open, setOpen] = useState(false);
   const [selectedApp, setSelectedApp] = useState(null);
 
@@ -179,28 +177,28 @@ const AdminDashboard = () => {
     }
   };
 
-const handleUpdateStatus = async (id, newStatus, newRemarks) => {
-  try {
-    const response = await axiosInstance.put(`http://localhost:4000/applications/${id}`, {
-      status: newStatus,
-      remarks: newRemarks,
-    });
-
-    // Update the state only if the request is successful
-    if (response.status === 200) {
-      setApplications((prev) =>
-        prev.map((app) =>
-          app._id === id ? { ...app, status: newStatus, remarks: newRemarks } : app
-        )
-      );
-      console.log("Status updated successfully:", response.data);
-    } else {
-      console.error("Failed to update status:", response.statusText);
+  const handleUpdateStatus = async (id, newStatus, newRemarks) => {
+    try {
+      const response = await axiosInstance.put(`/applications/${id}`, {
+        status: newStatus,
+        remarks: newRemarks,
+      });
+  
+      if (response.status === 200) {
+        setApplications((prev) =>
+          prev.map((app) =>
+            app._id === id ? { ...app, status: newStatus, remarks: newRemarks } : app
+          )
+        );
+        console.log("Status updated successfully:", response.data);
+      } else {
+        console.error("Failed to update status:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error updating status:", error.response?.data || error.message);
     }
-  } catch (error) {
-    console.error("Error updating status:", error);
-  }
-};
+  };
+  
 
 
   const filteredServices = services.filter(
@@ -501,32 +499,33 @@ const handleUpdateStatus = async (id, newStatus, newRemarks) => {
                         {app.service.name}
                       </TableCell>
                       <TableCell>
-                        <TextField
-                          select
-                          value={app.status}
-                          variant="outlined"
-                          size="small"
-                          sx={{
-                            width: 120,
-                            color: "white",
-                            "& .MuiInputBase-input": { color: "white" },
-                          }} // Set text color to white
-                        >
-                          {["Pending", "Approved", "Rejected"].map((status) => (
-                            <MenuItem
-                              key={status}
-                              value={status}
-                              onChange={(e) => handleStatusChange(app._id, e.target.value)}
-                              sx={{
-                                color: "white",
-                                backgroundColor: "#333",
-                                "&:hover": { backgroundColor: "#444" },
-                              }} // White text with dark background
-                            >
-                              {status}
-                            </MenuItem>
-                          ))}
-                        </TextField>
+                      <TextField
+  select
+  value={app.status}
+  variant="outlined"
+  size="small"
+  onChange={(e) => handleStatusChange(app._id, e.target.value)}  // ✅ Correct placement
+  sx={{
+    width: 120,
+    color: "white",
+    "& .MuiInputBase-input": { color: "white" },
+  }}
+>
+  {["Pending", "Approved", "Rejected"].map((status) => (
+    <MenuItem
+      key={status}
+      value={status}
+      sx={{
+        color: "white",
+        backgroundColor: "#333",
+        "&:hover": { backgroundColor: "#444" },
+      }}
+    >
+      {status}
+    </MenuItem>
+  ))}
+</TextField>
+
                       </TableCell>
                       <TableCell>
   <TextField
@@ -551,9 +550,12 @@ const handleUpdateStatus = async (id, newStatus, newRemarks) => {
   </Tooltip>
 
   <Tooltip title="Update Status" arrow>
-    <IconButton color="primary" onClick={() => handleUpdateStatus(app)}>
-      <Edit />
-    </IconButton>
+  <IconButton
+  color="primary"
+  onClick={() => handleUpdateStatus(app._id, app.status, app.remarks)}  // ✅ Pass required params
+>
+  <Edit />
+</IconButton>
   </Tooltip>
 </TableCell>
 

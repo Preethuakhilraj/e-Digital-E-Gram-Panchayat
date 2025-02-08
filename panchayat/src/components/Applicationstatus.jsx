@@ -1,6 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import axiosInstance from "./axiosinterceptor";
+import { Chip } from "@mui/material";
 
 const ApplicationStatus = () => {
   const [userApplications, setUserApplications] = useState([]);
@@ -8,14 +9,14 @@ const ApplicationStatus = () => {
   useEffect(() => {
     const fetchApplications = async () => {
       const storedUser = localStorage.getItem("user");
-      console.log(storedUser)
+      console.log(storedUser);
       if (!storedUser) {
         console.error("User not found in localStorage");
         return;
       }
-      const parsedUser = JSON.parse(storedUser); 
+      const parsedUser = JSON.parse(storedUser);
       const userId = parsedUser._id;
-      
+
       if (!userId) {
         console.error("No user ID found, cannot fetch applications.");
         return;
@@ -26,23 +27,64 @@ const ApplicationStatus = () => {
         setUserApplications(res.data);
         console.log("Applications fetched:", res.data);
       } catch (error) {
-        console.error("Error fetching applications:", error.response?.data || error.message);
+        console.error(
+          "Error fetching applications:",
+          error.response?.data || error.message
+        );
       }
     };
 
     fetchApplications();
   }, []);
-
+  const getStatusChip = (status) => {
+    switch (status) {
+      case "Approved":
+        return <Chip label="Approved" color="success" variant="filled" />;
+      case "Rejected":
+        return <Chip label="Rejected" color="error" variant="filled" />;
+      case "Pending":
+      default:
+        return <Chip label="Pending" color="warning" variant="outlined" />;
+    }
+  };
   return (
     <Box>
       {userApplications.length > 0 ? (
         userApplications.map((app) => (
-          <Box key={app._id} sx={{ padding: 2, border: "1px solid #ddd", marginBottom: "10px", borderRadius: "8px", backgroundColor: "#f9f9f9" }}>
-            <Typography variant="h6">{app.service?.name || "Unknown Service"}</Typography>
-            <Typography variant="body2">
-              <strong>Status:</strong> {app.status}
+          <Box
+            key={app._id}
+            sx={{
+              padding: 2,
+              border: "1px solid #ddd",
+              marginBottom: "10px",
+              borderRadius: "8px",
+              backgroundColor: "#f9f9f9",
+            }}
+          >
+            <Typography variant="h6">
+              {app.service?.name || "Unknown Service"}
             </Typography>
-            <Typography variant="body2"><strong>Date Applied:</strong> {new Date(app.createdAt).toLocaleDateString()}
+            <Typography variant="h6">
+              {app.details || "Unknown Service"}
+            </Typography>
+            <Typography
+              variant="body2"
+              sx={{ display: "flex", alignItems: "center" }}
+            >
+              <strong>Status:</strong>&nbsp; {getStatusChip(app.status)}
+            </Typography>
+            <Typography variant="body2">
+              <strong>Remarks:</strong> {app.remarks|| "Nil"}
+            </Typography>
+            <Typography variant="body2">
+              <strong>Date Applied:</strong>{" "}
+              {app.createdAt
+                ? new Date(app.createdAt).toLocaleDateString("en-GB", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                  })
+                : "N/A"}
             </Typography>
           </Box>
         ))
