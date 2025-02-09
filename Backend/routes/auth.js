@@ -43,6 +43,17 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+router.put('/update-profile/:id', async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const updatedData = req.body;
+
+    const updatedUser = await User.findByIdAndUpdate(userId, updatedData, { new: true });
+    res.json(updatedUser);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update profile' });
+  }
+});
 
 
 module.exports = router;
