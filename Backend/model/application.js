@@ -6,13 +6,15 @@ const ApplicationSchema = new mongoose.Schema({
   details:{ type: String},
   status: { type: String, default: "Pending" },
   remarks: { type: String },
-  documents: [
-    {
-      name: { type: String, required: true },
-      data: { type: Buffer, required: true }, // Ensure this matches your upload format
-    },
-  ],
-});
+
+    documents: [
+      {
+        name: { type: String, required: true },
+        data: { type: Buffer, required: true },
+      },
+    ],
+    createdAt: { type: Date, default: Date.now }, 
+  });
 
 
 module.exports = mongoose.model("Application", ApplicationSchema);

@@ -2,6 +2,7 @@ import { Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import axiosInstance from "./axiosinterceptor";
 import { Chip } from "@mui/material";
+import moment from "moment";
 
 const ApplicationStatus = () => {
   const [userApplications, setUserApplications] = useState([]);
@@ -77,15 +78,10 @@ const ApplicationStatus = () => {
               <strong>Remarks:</strong> {app.remarks|| "Nil"}
             </Typography>
             <Typography variant="body2">
-              <strong>Date Applied:</strong>{" "}
-              {app.createdAt
-                ? new Date(app.createdAt).toLocaleDateString("en-GB", {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric",
-                  })
-                : "N/A"}
-            </Typography>
+  <strong>Date Applied:</strong>
+  {/* {new Date(app.createdAt).toLocaleDateString()} */}
+  {app.createdAt ? moment(app.createdAt).format("DD-MM-YYYY") : "N/A"} 
+</Typography>
           </Box>
         ))
       ) : (

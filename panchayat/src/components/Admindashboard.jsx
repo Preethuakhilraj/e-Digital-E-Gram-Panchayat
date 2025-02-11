@@ -191,6 +191,7 @@ const AdminDashboard = () => {
           )
         );
         console.log("Status updated successfully:", response.data);
+        alert("Successfully updated status!");
       } else {
         console.error("Failed to update status:", response.statusText);
       }

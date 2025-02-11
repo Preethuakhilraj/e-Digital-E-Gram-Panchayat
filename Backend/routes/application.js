@@ -47,7 +47,8 @@ router.get("/", async (req, res) => {
   try {
     const applications = await Application.find().populate([
       { path: 'user', select: 'name' },
-      { path: 'service', select: 'name description' }
+      { path: 'service', select: 'name description' },
+      { path: 'createdAt', select: 'createdAt' },
     ]);
 
     // Send the applications data as a JSON response
