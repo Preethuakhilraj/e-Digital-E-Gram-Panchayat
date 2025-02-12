@@ -51,10 +51,10 @@ const Login = () => {
         {/* Left Section */}
         <Box className="login-left">
           <Typography variant="h4" gutterBottom>
-            The best offer for your business
+          Welcome Back to  </Typography >  <Typography variant="h4" gutterBottom> Digital Panchayat!
           </Typography>
           <Typography variant="body1">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Temporibus, expedita iusto veniam atque magni tempora mollitia.
+           Access your personalized dashboard to stay connected with community updates, public services, and government initiatives. Your gateway to a smarter, more efficient civic experience awaits.
           </Typography>
         </Box>
 
@@ -152,7 +152,12 @@ const Login = () => {
                 Sign up
               </Link>
             </Typography>
-          </form>
+
+            <Typography variant="body2" align="center" mt={3}>
+                            <Link href="/" underline="hover">
+             Back to Home
+              </Link>
+            </Typography>          </form>
         </Box>
       </Box>
     </Box>

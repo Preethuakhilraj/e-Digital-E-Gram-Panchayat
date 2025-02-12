@@ -3,4 +3,10 @@
 }
     .css-1cwctwi {
         background-color: #47916b}
-   
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #f9fafb;
+          }
+          

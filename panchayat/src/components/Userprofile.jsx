@@ -1,13 +1,28 @@
-import { useState } from "react";
-import { Box, Paper, TextField, Avatar, Typography, Button, IconButton, CircularProgress, Grid } from "@mui/material";
+import { useState, useEffect } from "react";
+import {
+  Box,
+  Paper,
+  TextField,
+  Avatar,
+  Typography,
+  Button,
+  IconButton,
+  CircularProgress,
+  Grid,
+} from "@mui/material";
 import { Edit, Save, Cancel, CloudUpload } from "@mui/icons-material";
 import PropTypes from "prop-types";
 import axiosInstance from "./axiosinterceptor";
 
-const UserProfile = ({ userProfile, onUpdateProfile, isLoading, error }) => {
+const UserProfile = ({ userProfile, onUpdateProfile = () => {}, isLoading, error }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState(userProfile);
   const [avatar, setAvatar] = useState("/assets/user-avatar.png");
+
+  // Sync formData with updated userProfile props
+  useEffect(() => {
+    setFormData(userProfile);
+  }, [userProfile]);
 
   const handleEditToggle = () => setIsEditing(!isEditing);
 
@@ -17,18 +32,17 @@ const UserProfile = ({ userProfile, onUpdateProfile, isLoading, error }) => {
   };
 
   const handleSave = async () => {
-    
-      try {
-        const response = await axiosInstance.put(`/auth/update-profile/${formData._id}`, formData);
-        onUpdateProfile(response.data);
-        setIsEditing(false);
-      } catch (error) {
-        console.error(error);
-        alert("Error updating profile!");
-      }
- 
-      };
-  
+    try {
+      const response = await axiosInstance.put(`/auth/update-profile/${formData._id}`, formData);
+      onUpdateProfile(response.data);
+      setIsEditing(false);
+      alert(" Profile successfully updated");
+    } catch (error) {
+      console.error("Profile Update Error:", error);
+      alert("Error updating profile!");
+    }
+  };
+
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -43,19 +57,17 @@ const UserProfile = ({ userProfile, onUpdateProfile, isLoading, error }) => {
       sx={{
         minHeight: "80vh",
         display: "flex",
-        flexDirection: { xs: "column", md: "row" }, // Responsive layout
+        flexDirection: { xs: "column", md: "row" },
         alignItems: "center",
         justifyContent: "center",
         padding: 2,
         gap: 2,
       }}
     >
-      {/* 📸 Image Section (Left Side) */}
       <Box
         sx={{
-          flex: 1, // Takes 50% of the space
-          backgroundImage:
-            'url("https://img.freepik.com/free-vector/registration-form-template-with-flat-design_23-2147971971.jpg?ga=GA1.1.1540396942.1739092747&semt=ais_hybrid")',
+          flex: 1,
+          backgroundImage: 'url("https://img.freepik.com/free-vector/registration-form-template-with-flat-design_23-2147971971.jpg")',
           backgroundSize: "cover",
           backgroundPosition: "center",
           borderRadius: 2,
@@ -63,7 +75,6 @@ const UserProfile = ({ userProfile, onUpdateProfile, isLoading, error }) => {
         }}
       />
 
-      {/* 📝 Registration Form (Right Side) */}
       <Box sx={{ flex: 1 }}>
         {isLoading ? (
           <CircularProgress />
@@ -149,9 +160,10 @@ const UserProfile = ({ userProfile, onUpdateProfile, isLoading, error }) => {
     </Box>
   );
 };
+
 UserProfile.propTypes = {
   userProfile: PropTypes.object.isRequired,
-  onUpdateProfile: PropTypes.func.isRequired,
+  onUpdateProfile: PropTypes.func,
   isLoading: PropTypes.bool,
   error: PropTypes.string,
 };

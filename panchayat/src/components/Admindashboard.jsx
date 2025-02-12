@@ -4,7 +4,6 @@ import {
   Visibility,
   AssignmentTurnedIn,
   Logout,
-  DarkMode,
 } from "@mui/icons-material";
 import {
   Avatar,
@@ -210,7 +209,7 @@ const AdminDashboard = () => {
     <Box
       sx={{
         display: "flex",
-        bgcolor: DarkMode ? "#121212" : "#f8f9fa",
+       backgroundColor: "#f4f6f9",
         minHeight: "100vh",
       }}
     >

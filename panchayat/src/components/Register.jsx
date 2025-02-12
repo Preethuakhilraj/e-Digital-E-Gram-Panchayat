@@ -53,11 +53,10 @@ const Register = () => {
         {/* Left Section */}
         <Box className="login-left">
           <Typography variant="h4" gutterBottom>
-            Join us today!
+          Join Digital Panchayat today! 
           </Typography>
           <Typography variant="body1">
-            Discover a better way to manage your business. Sign up and get access
-            to all the amazing features we offer.
+          Empower yourself with seamless access to community services, real-time updates, and essential government resources. Sign up now to be an active part of your local governance and development.
           </Typography>
         </Box>
 
@@ -176,6 +175,11 @@ const Register = () => {
                 Login
               </Link>
             </Typography>
+            <Typography variant="body2" align="center" mt={3}>
+                            <Link href="/" underline="hover">
+             Back to Home
+              </Link>
+            </Typography>  
           </form>
         </Box>
       </Box>

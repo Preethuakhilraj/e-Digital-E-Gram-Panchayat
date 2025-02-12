@@ -9,7 +9,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#533A71', 
+      main: '#001d18', 
     },
     secondary: {
       main: '#FFD700', // Gold for highlights
@@ -36,10 +36,7 @@ export default function Navbar() {
               Digital Panchayat
             </Typography>
             <Button color="inherit" sx={{ mx: 1 }} href="/">Home</Button>
-            <Button color="inherit" sx={{ mx: 1 }} href="/services">Services</Button>
-            <Button color="inherit" sx={{ mx: 1 }} href="/gallery">Gallery</Button>
-            <Button color="inherit" sx={{ mx: 1 }} href="/about">About Us</Button>
-            <Button color="inherit" sx={{ mx: 1 }} href="/contact">Contact</Button>
+            <Button color="inherit" sx={{ mx: 1 }} href="/login">Services</Button>
             <Button color="secondary" variant="outlined" sx={{ mx: 1 }} href="/login">Login</Button>
           </Toolbar>
         </AppBar>
