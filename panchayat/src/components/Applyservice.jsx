@@ -6,9 +6,14 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "./axiosinterceptor";
+import { InputAdornment } from "@mui/material";
+import { Search } from "@mui/icons-material";
+
 
 const ApplyService = () => {
   const [services, setServices] = useState([]);
+  const [filteredServices, setFilteredServices] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [loadingId, setLoadingId] = useState(null);
   const [open, setOpen] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
@@ -27,7 +32,7 @@ const ApplyService = () => {
       try {
         const res = await axiosInstance.get("/services");
         setServices(res.data);
-        console.log(services)
+        setFilteredServices(res.data);
       } catch (error) {
         console.error("Error fetching services:", error);
       }
@@ -35,7 +40,19 @@ const ApplyService = () => {
     fetchServices();
   }, []);
 
-  // Open modal and autofill user details
+  const handleSearch = (e) => {
+    const term = e.target.value;
+    setSearchTerm(term);
+    if (term.trim() === "") {
+      setFilteredServices(services);
+    } else {
+      const filtered = services.filter((service) =>
+        service.name.toLowerCase().includes(term.toLowerCase())
+      );
+      setFilteredServices(filtered);
+    }
+  };
+
   const handleOpenModal = (service) => {
     const storedUser = localStorage.getItem("user");
 
@@ -52,12 +69,11 @@ const ApplyService = () => {
       user: user._id,
       status: "Pending",
       documents: [],
-    details: "",
+      details: "",
     });
     setOpen(true);
   };
 
-  // Handle input changes
   const handleChange = (e) => {
     setApplicationData({
       ...applicationData,
@@ -65,30 +81,27 @@ const ApplyService = () => {
     });
   };
 
-  // Handle file upload
   const handleFileUpload = (e) => {
     setApplicationData({
       ...applicationData,
-      documents: [...e.target.files], // Store uploaded files
+      documents: [...e.target.files],
     });
   };
 
-  // Submit application
   const handleSubmitApplication = async () => {
     setLoadingId(selectedService._id);
 
     try {
       const formData = new FormData();
-      console.log(applicationData);
       formData.append("service", applicationData.service);
       formData.append("user", applicationData.user);
       formData.append("status", applicationData.status);
       formData.append("details", applicationData.details);
 
-      // Append files
       applicationData.documents.forEach((file) => {
         formData.append("documents", file);
       });
+
       const response = await axiosInstance.post("/applications/apply", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
@@ -106,9 +119,25 @@ const ApplyService = () => {
   };
 
   return (
-    <Box>
-      {services.length > 0 ? (
-        services.map((service) => (
+    <Box sx={{ padding: 2, borderRadius: "20px"}}>
+      <TextField
+        fullWidth
+        label="Search Services"
+        variant="outlined"
+        value={searchTerm}
+        onChange={handleSearch}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <Search color="action" />
+            </InputAdornment>
+          ),
+        }}
+        sx={{ marginBottom: 2,backgroundColor:'#e5f1f0' }}
+      />
+
+      {filteredServices.length > 0 ? (
+        filteredServices.map((service) => (
           <Paper
             key={service._id}
             sx={{
@@ -131,17 +160,14 @@ const ApplyService = () => {
           </Paper>
         ))
       ) : (
-        <Typography>No services available at the moment.</Typography>
+        <Typography>No services found.</Typography>
       )}
 
-      {/* Dialog Box for Application */}
       <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="sm">
         <DialogTitle>Apply for {selectedService?.name}</DialogTitle>
-        <Typography style={{ marginLeft: '25px' }}>
-  {selectedService?.description}
-</Typography>
+        <Typography sx={{ marginLeft: 3 }}>{selectedService?.description}</Typography>
         <DialogContent>
-            <TextField
+          <TextField
             fullWidth
             label="Details"
             name="details"
@@ -156,16 +182,12 @@ const ApplyService = () => {
             type="file"
             multiple
             onChange={handleFileUpload}
-            style={{ marginTop: "10px" }}
+            sx={{ marginTop: 1 }}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpen(false)} color="secondary">
-            Cancel
-          </Button>
-          <Button onClick={handleSubmitApplication} color="primary" variant="contained">
-            Apply
-          </Button>
+          <Button onClick={() => setOpen(false)} color="secondary">Cancel</Button>
+          <Button onClick={handleSubmitApplication} color="primary" variant="contained">Apply</Button>
         </DialogActions>
       </Dialog>
     </Box>
