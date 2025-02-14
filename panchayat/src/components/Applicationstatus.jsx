@@ -79,8 +79,7 @@ const ApplicationStatus = () => {
             </Typography>
             <Typography variant="body2">
   <strong>Date Applied:</strong>
-  {/* {new Date(app.createdAt).toLocaleDateString()} */}
-  {app.createdAt ? moment(app.createdAt).format("DD-MM-YYYY") : "N/A"} 
+    {app.createdAt ? moment(app.createdAt).format("DD-MM-YYYY") : "N/A"} 
 </Typography>
           </Box>
         ))

@@ -54,9 +54,7 @@ const AdminDashboard = () => {
   const [serviceToEdit, setServiceToEdit] = useState(null);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [serviceToDelete, setServiceToDelete] = useState(null);
-  // const [newStatus, setNewStatus] = useState("");
-  // const [newRemarks, setNewRemarks] = useState("");
-  // const [openDialog, setOpenDialog] = useState(false);
+  
   const navigate = useNavigate();
 
   // Fetch Services and Applications
@@ -266,11 +264,6 @@ const AdminDashboard = () => {
       </Drawer>
 
       {/* Main Content */}
-      {/* <Box sx={{ mt: 3 }}>
-  <Typography variant="h5" sx={{ color: "#c9e4d9", marginBottom: 3 }}>
-    {selectedSection}
-  </Typography> */}
-
       {selectedSection === "Services List" && (
         <Box sx={{ padding: 3, backgroundColor: " #bfbfbf", width: "90vw" }}>
           {/* Header with Button */}

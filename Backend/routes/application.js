@@ -90,12 +90,7 @@ router.get("/:userId", async (req, res) => {
       { path: 'user', select: 'name' },
       { path: 'service', select: 'name' }
     ]);
-    // Application.find({ user: userId }).populate("service"); // ✅ Ensure correct field name
-    // const applications = await Application.find()
-    // .populate('user', 'name')      
-    // .populate('service', 'name')        // Populating 'name' from 'user'
-    // .populate('service', 'description');   // Populating both 'name' & 'details' from 'service'
-  
+      
   res.status(200).json(applications);
   } catch (err) {
     console.error("Error fetching applications:", err);
