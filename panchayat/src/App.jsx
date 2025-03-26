@@ -5,7 +5,6 @@ import Register from "./components/Register";
 import Login from "./components/Login";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import UserDashboard from "./components/Userdashboard";
-import SearchServices from "./components/Searchservices";
 import ApplyServices from "./components/Applyservice";
 import ApplicationStatus from "./components/Applicationstatus";
 import UserProfile from "./components/Userprofile";
@@ -26,7 +25,6 @@ function App() {
             <Route path="/user-dashboard" element={<UserDashboard />} />
             <Route path="/staff-dashboard" element={<StaffDashboard />} />
             <Route path="/admin-dashboard" element={<AdminDashboard />} />
-            <Route path="/search-services" element={<SearchServices />} />
             <Route path="/apply-services" element={<ApplyServices />} />
             <Route path="/application-status" element={<ApplicationStatus />} />
             <Route path="/my-profile" element={<UserProfile />} />
