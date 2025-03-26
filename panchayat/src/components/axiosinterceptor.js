@@ -1,7 +1,7 @@
 import axios from "axios";
 const axiosInstance=axios.create({
-baseURL:'http://localhost:4000'
-// baseURL:'https://employeemanagement-server.vercel.app'
+// baseURL:'http://localhost:4000'
+baseURL:'https://e-digital-e-gram-panchayat-server.vercel.app'
 })
 axiosInstance.interceptors.request.use((config) => {
     const token = localStorage.getItem('token'); // Adjust token retrieval logic as necessary
