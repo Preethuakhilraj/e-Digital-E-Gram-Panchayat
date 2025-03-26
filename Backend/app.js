@@ -15,12 +15,16 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // CORS setup
+// app.use(cors({
+//   origin: "http://localhost:5173", // Replace with your frontend's URL
+//   methods: ["GET", "POST", "PUT", "DELETE"],
+//   credentials: true, // Allow cookies if needed
+// }));
 app.use(cors({
-  origin: "http://localhost:5173", // Replace with your frontend's URL
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true, // Allow cookies if needed
-}));
-
+  origin: 'https://e-digital-e-gram-panchayat-client.vercel.app', // Frontend URL
+  credentials: true, // Allow cookies/auth headers
+}
+));
 // Static files
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
