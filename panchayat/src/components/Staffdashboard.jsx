@@ -43,9 +43,10 @@ const StaffDashboard = ({ userProfile }) => {
   const navigate = useNavigate();
   const [selectedSection, setSelectedSection] = useState("View Services");
   const [services, setServices] = useState([]);
-    const [open, setOpen] = useState(false);
+  const [applications, setApplications] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [open, setOpen] = useState(false);
   const [selectedApp, setSelectedApp] = useState(null);
-    const [applications, setApplications] = useState([]);
   useEffect(() => {
       const fetchData = async () => {
         try {
@@ -197,11 +198,11 @@ const StaffDashboard = ({ userProfile }) => {
                 boxShadow: "0px 4px 10px rgba(0,0,0,0.1)",     
               }}
             >
-              { (
+              {loading ? (
                 <Box display="flex" justifyContent="center" alignItems="center" height={100}>
                   <CircularProgress color="secondary" />
                 </Box>
-              ) (
+              ) : (
                 <Stack spacing={2}>
                   {services.map((service) => (
                     <Paper
