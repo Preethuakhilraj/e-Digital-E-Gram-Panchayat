@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Link } from '@mui/material';
 
 const theme = createTheme({
   palette: {
@@ -35,9 +36,9 @@ export default function Navbar() {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Digital Panchayat
             </Typography>
-            <Button color="inherit" sx={{ mx: 1 }} href="/">Home</Button>
-            <Button color="inherit" sx={{ mx: 1 }} href="/login">Services</Button>
-            <Button color="secondary" variant="outlined" sx={{ mx: 1 }} href="/login">Login</Button>
+            <Button color="inherit" sx={{ mx: 1 }} component={Link} to="/">Home</Button>
+<Button color="inherit" sx={{ mx: 1 }} component={Link} to="/services">Services</Button>
+<Button color="secondary" variant="outlined" sx={{ mx: 1 }} component={Link} to="/login">Login</Button>
           </Toolbar>
         </AppBar>
       </Box>
