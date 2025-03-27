@@ -24,7 +24,7 @@ app.use(cors({
   origin: (origin, callback) => {
     const allowedOrigins = [
       "http://localhost:5173", 
-      "https://e-digital-e-gram-panchayat-client.vercel.app"
+      "http://e-digital-e-gram-panchayat-client.vercel.app"
     ];
     
     if (!origin || allowedOrigins.includes(origin)) {
