@@ -13,7 +13,7 @@ const port = process.env.PORT || 4000;
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
+app.options('*', cors());
 // CORS setup
 // app.use(cors({
 //   origin: "http://localhost:5173", // Replace with your frontend's URL
@@ -21,10 +21,22 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //   credentials: true, // Allow cookies if needed
 // }));
 app.use(cors({
-  origin: ['https://e-digital-e-gram-panchayat-client.vercel.app'], // Allow frontend domain
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  origin: (origin, callback) => {
+    const allowedOrigins = [
+      "http://localhost:5173", 
+      "https://e-digital-e-gram-panchayat-client.vercel.app"
+    ];
+    
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true); // Allow the request
+    } else {
+      callback(new Error("Not allowed by CORS")); // Block the request
+    }
+  },
+  methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true, // Allow cookies/auth headers
 }));
+
 // Static files
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
