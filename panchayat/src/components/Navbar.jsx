@@ -39,7 +39,7 @@ export default function Navbar() {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Digital Panchayat
             </Typography>    <Button color="inherit" sx={{ mx: 1 }} onClick={() => navigate("/")}>Home</Button>
-    <Button color="inherit" sx={{ mx: 1 }} onClick={() => navigate("/services")}>Services</Button>
+    <Button color="inherit" sx={{ mx: 1 }} onClick={() => navigate("/login")}>Services</Button>
     <Button color="secondary" variant="outlined" sx={{ mx: 1 }} onClick={() => navigate("/login")}>Login</Button>
 
           </Toolbar>
