@@ -20,20 +20,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //   credentials: true, // Allow cookies if needed
 // }));
 app.use(cors({
-  origin: (origin, callback) => {
-    const allowedOrigins = [
-      "http://localhost:5173", 
-      "https://e-digital-e-gram-panchayat-client.vercel.app"
-    ];
-    
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true); // Allow the request
-    } else {
-      callback(new Error("Not allowed by CORS")); // Block the request
-    }
-  },
+  origin: "https://e-digital-e-gram-panchayat-client.vercel.app", // Your frontend URL
   methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true, // Allow cookies/auth headers
+  credentials: true
 }));
 
 // Static files
