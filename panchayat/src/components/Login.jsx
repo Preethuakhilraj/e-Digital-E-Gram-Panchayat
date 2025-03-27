@@ -22,40 +22,42 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const navigate=useNavigate();
+  const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-  
-    // Check if email & password are provided
+
     if (!email || !password) {
       setError("Email and password are required.");
       return;
     }
-  
+
     try {
       console.log("Attempting login for:", email);
-  
+
       const response = await axiosInstance.post("/auth/login", { email, password });
-  
+
       if (response.status === 200) {
         console.log("Login successful:", response.data);
-  
+
         const { token, user } = response.data;
-  
+        if (!user || !user.role) {
+          throw new Error("Invalid user data received.");
+        }
+
         // Store token securely
-        sessionStorage.setItem("token", token);
-        sessionStorage.setItem("user", JSON.stringify(user));
-  
-        // Redirect user based on role
-        navigate(`/${user.role}-dashboard`);
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
+
+        console.log("Navigating to:", `/${user.role}-dashboard`);
+        navigate(`/${user.role}-dashboard`, { replace: true });
       } else {
         throw new Error("Unexpected response from server.");
       }
     } catch (err) {
       console.error("Login error:", err.response?.data || err.message);
-      
-      // Display better error messages
+
       if (err.response?.status === 401) {
         setError("Invalid email or password.");
       } else if (err.response?.status === 500) {
@@ -65,7 +67,6 @@ const Login = () => {
       }
     }
   };
-  
 
   return (
     <Box className="center-wrapper">
@@ -73,10 +74,12 @@ const Login = () => {
         {/* Left Section */}
         <Box className="login-left">
           <Typography variant="h4" gutterBottom>
-          Welcome Back to  </Typography >  <Typography variant="h4" gutterBottom> Digital Panchayat!
+            Welcome Back to  
+          </Typography>  
+          <Typography variant="h4" gutterBottom> Digital Panchayat!
           </Typography>
           <Typography variant="body1">
-           Access your personalized dashboard to stay connected with community updates, public services, and government initiatives. Your gateway to a smarter, more efficient civic experience awaits.
+            Access your personalized dashboard to stay connected with community updates, public services, and government initiatives. Your gateway to a smarter, more efficient civic experience awaits.
           </Typography>
         </Box>
 
@@ -176,10 +179,11 @@ const Login = () => {
             </Typography>
 
             <Typography variant="body2" align="center" mt={3}>
-                            <Link href="/" underline="hover">
-             Back to Home
+              <Link href="/" underline="hover">
+                Back to Home
               </Link>
-            </Typography>          </form>
+            </Typography>
+          </form>
         </Box>
       </Box>
     </Box>

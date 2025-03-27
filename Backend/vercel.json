@@ -12,7 +12,11 @@
             "dest":"app.js"
         }
     ],
-    "rewrites": [
-      { "source": "/(.*)", "destination": "/index.html" }
-    ]
+    
+        "rewrites": [
+          { "source": "/admin-dashboard", "destination": "/index.html" },
+          { "source": "/user-dashboard", "destination": "/index.html" }
+        ]
+      
+      
   }
