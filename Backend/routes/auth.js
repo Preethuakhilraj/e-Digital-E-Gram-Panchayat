@@ -32,15 +32,29 @@ router.post("/login", async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    // Ensure password is hashed before comparison
+    // Compare entered password with stored hashed password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
 
-    const token = jwt.sign({ id: user._id, role: user.role }, 1122, { expiresIn: "1d" });
+    // Generate JWT token
+    const token = jwt.sign(
+      { id: user._id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d", algorithm: "HS256" }
+    );
 
-    res.json({ token, user });
+    res.json({
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role, // Only return necessary fields
+      },
+    });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error(error);
+    res.status(500).json({ message: "Server error, please try again later" });
   }
 });
 router.put('/update-profile/:id', async (req, res) => {

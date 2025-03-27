@@ -27,20 +27,42 @@ const Login = () => {
     e.preventDefault();
     setError("");
   
+    // Check if email & password are provided
+    if (!email || !password) {
+      setError("Email and password are required.");
+      return;
+    }
+  
     try {
       console.log("Attempting login for:", email);
+  
       const response = await axiosInstance.post("/auth/login", { email, password });
   
-      console.log("Login successful:", response.data);
+      if (response.status === 200) {
+        console.log("Login successful:", response.data);
   
-      const { token, user } = response.data;
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
+        const { token, user } = response.data;
   
-      navigate(`/${user.role}-dashboard`);
+        // Store token securely
+        sessionStorage.setItem("token", token);
+        sessionStorage.setItem("user", JSON.stringify(user));
+  
+        // Redirect user based on role
+        navigate(`/${user.role}-dashboard`);
+      } else {
+        throw new Error("Unexpected response from server.");
+      }
     } catch (err) {
-      console.error("Login error response:", err.response?.data || err.message);
-      setError(err.response?.data?.message || "Invalid email or password.");
+      console.error("Login error:", err.response?.data || err.message);
+      
+      // Display better error messages
+      if (err.response?.status === 401) {
+        setError("Invalid email or password.");
+      } else if (err.response?.status === 500) {
+        setError("Server error, please try again later.");
+      } else {
+        setError(err.response?.data?.message || "Something went wrong.");
+      }
     }
   };
   
