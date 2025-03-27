@@ -5,7 +5,9 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Link } from '@mui/material';
+import { useNavigate } from "react-router-dom";
+
+
 
 const theme = createTheme({
   palette: {
@@ -19,6 +21,7 @@ const theme = createTheme({
 });
 
 export default function Navbar() {
+  const navigate = useNavigate();
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ flexGrow: 1 }}>
@@ -35,10 +38,10 @@ export default function Navbar() {
             </IconButton>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Digital Panchayat
-            </Typography>
-            <Button color="inherit" sx={{ mx: 1 }} component={Link} to="/">Home</Button>
-<Button color="inherit" sx={{ mx: 1 }} component={Link} to="/services">Services</Button>
-<Button color="secondary" variant="outlined" sx={{ mx: 1 }} component={Link} to="/login">Login</Button>
+            </Typography>    <Button color="inherit" sx={{ mx: 1 }} onClick={() => navigate("/")}>Home</Button>
+    <Button color="inherit" sx={{ mx: 1 }} onClick={() => navigate("/services")}>Services</Button>
+    <Button color="secondary" variant="outlined" sx={{ mx: 1 }} onClick={() => navigate("/login")}>Login</Button>
+
           </Toolbar>
         </AppBar>
       </Box>
