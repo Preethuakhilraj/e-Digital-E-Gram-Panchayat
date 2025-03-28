@@ -339,7 +339,7 @@ const handleUpdateStatus = async (id, newStatus, newRemarks) => {
                             <IconButton
                               color="primary"
                               sx={{
-                                bgcolor: "white",
+                                bgcolor: "#40916c",
                                 "&:hover": { bgcolor: "#1b4332" },
                                 color: "#fff",
                               }}
@@ -651,7 +651,7 @@ const handleUpdateStatus = async (id, newStatus, newRemarks) => {
             value={serviceName}
             onChange={(e) => setServiceName(e.target.value)}
             margin="dense"
-            sx={{ bgcolor: "#2c3e50", color: "#c9e4d9", borderRadius: 1 }}
+            sx={{ bgcolor: "white", color: "#c9e4d9", borderRadius: 1 }}
           />
           <TextField
             label="Description"
@@ -661,7 +661,7 @@ const handleUpdateStatus = async (id, newStatus, newRemarks) => {
             margin="dense"
             multiline
             rows={3}
-            sx={{ bgcolor: "#2c3e50", color: "#c9e4d9", borderRadius: 1 }}
+            sx={{ bgcolor: "white", color: "#c9e4d9", borderRadius: 1 }}
           />
         </DialogContent>
         <DialogActions>
