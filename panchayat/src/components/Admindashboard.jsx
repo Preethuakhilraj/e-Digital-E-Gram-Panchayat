@@ -266,7 +266,7 @@ const handleUpdateStatus = async (id, newStatus, newRemarks) => {
               sx={{
                 padding: "10px 20px",
                 fontSize: "1rem",
-                backgroundColor: "white",
+                backgroundColor: "#2d6a4f",
                 borderRadius: "8px",
                 boxShadow: 3,
                 "&:hover": { backgroundColor: "#1b4332" },
@@ -339,7 +339,7 @@ const handleUpdateStatus = async (id, newStatus, newRemarks) => {
                             <IconButton
                               color="primary"
                               sx={{
-                                bgcolor: "#40916c",
+                                bgcolor: "white",
                                 "&:hover": { bgcolor: "#1b4332" },
                                 color: "#fff",
                               }}
