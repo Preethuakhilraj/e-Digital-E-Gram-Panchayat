@@ -46,7 +46,6 @@ const drawerWidth = 240;
 const AdminDashboard = () => {
   const [selectedSection, setSelectedSection] = useState("Service List");
   const [services, setServices] = useState([]);
-  const [searchTerm,setSearchTerm]=useState();
   const [applications, setApplications] = useState([]);
   const [openServiceDialog, setOpenServiceDialog] = useState(false);
   const [serviceName, setServiceName] = useState("");
@@ -179,7 +178,9 @@ const handleUpdateStatus = async (id, newStatus, newRemarks) => {
 };
 
 
-  const filteredServices = services.filter(service => service.name.toLowerCase().includes(searchTerm) || service.category.toLowerCase().includes(searchTerm))
+  const filteredServices = services.filter(
+    (service) => service.name.toLowerCase() || service.category.toLowerCase()
+  );
 
   return (
     <Box
@@ -219,7 +220,7 @@ const handleUpdateStatus = async (id, newStatus, newRemarks) => {
         </Box>
         <Divider sx={{ bgcolor: "white" }} />
         <List>
-          {["Services List", "Application List"].map((text) => (
+          {["Service List", "Application List"].map((text) => (
             <ListItem button key={text} onClick={() => handleNavigation(text)}>
               <ListItemIcon sx={{ color: "white" }}>
                 {text === " Services List" ? (
