@@ -46,6 +46,7 @@ const drawerWidth = 240;
 const AdminDashboard = () => {
   const [selectedSection, setSelectedSection] = useState("Service List");
   const [services, setServices] = useState([]);
+  const [searchTerm,setSearchTerm]=useState();
   const [applications, setApplications] = useState([]);
   const [openServiceDialog, setOpenServiceDialog] = useState(false);
   const [serviceName, setServiceName] = useState("");
@@ -125,7 +126,7 @@ const handleDeleteService = async () => {
 const handleCreateService = async () => {
   try {
     const newService = { name: serviceName, description: serviceDescription };
-    const response = await axiosInstance.post("/", newService);
+    const response = await axiosInstance.post("/services/", newService);
     setServices((prev) => [...prev, response.data]); // Add new service to state
     setServiceName("");
     setServiceDescription("");
@@ -178,9 +179,7 @@ const handleUpdateStatus = async (id, newStatus, newRemarks) => {
 };
 
 
-  const filteredServices = services.filter(
-    (service) => service.name.toLowerCase() || service.category.toLowerCase()
-  );
+  const filteredServices = services.filter(service => service.name.toLowerCase().includes(searchTerm) || service.category.toLowerCase().includes(searchTerm))
 
   return (
     <Box
@@ -613,7 +612,7 @@ const handleUpdateStatus = async (id, newStatus, newRemarks) => {
             value={serviceName}
             onChange={(e) => setServiceName(e.target.value)}
             margin="dense"
-            sx={{ bgcolor: "#2c3e50", color: "#c9e4d9", borderRadius: 1 }}
+            sx={{ bgcolor: "white", color: "#c9e4d9", borderRadius: 1 }}
           />
           <TextField
             label="Description"
@@ -623,7 +622,7 @@ const handleUpdateStatus = async (id, newStatus, newRemarks) => {
             margin="dense"
             multiline
             rows={3}
-            sx={{ bgcolor: "#2c3e50", color: "#c9e4d9", borderRadius: 1 }}
+            sx={{ bgcolor: "white", color: "#c9e4d9", borderRadius: 1 }}
           />
         </DialogContent>
         <DialogActions>
