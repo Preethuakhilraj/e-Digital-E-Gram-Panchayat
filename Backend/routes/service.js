@@ -17,7 +17,7 @@ router.post("/", async (req, res) => {
 });
 router.put("/:id", async (req, res) => {
   const { id } = req.params;
-  const { name, description, createdBy } = req.body;
+  const { name, description } = req.body;
 
   try {
     const updatedService = await Service.findByIdAndUpdate(
