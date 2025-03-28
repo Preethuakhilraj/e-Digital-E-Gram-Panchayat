@@ -220,7 +220,7 @@ const handleUpdateStatus = async (id, newStatus, newRemarks) => {
         </Box>
         <Divider sx={{ bgcolor: "white" }} />
         <List>
-          {["Service List", "Application List"].map((text) => (
+          {["Services List", "Application List"].map((text) => (
             <ListItem button key={text} onClick={() => handleNavigation(text)}>
               <ListItemIcon sx={{ color: "white" }}>
                 {text === " Services List" ? (
