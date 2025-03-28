@@ -114,7 +114,7 @@ const AdminDashboard = () => {
   };
 const handleDeleteService = async () => {
   try {
-    await axiosInstance.delete(`/${serviceToDelete}`);
+    await axiosInstance.delete(`/services/${serviceToDelete}`);
     setServices((prev) => prev.filter((service) => service._id !== serviceToDelete));
     setConfirmDelete(false);
   } catch (error) {
@@ -138,7 +138,7 @@ const handleCreateService = async () => {
 const handleUpdateService = async () => {
   try {
     const updatedService = { name: serviceName, description: serviceDescription };
-    await axiosInstance.put(`/${serviceToEdit}`, updatedService);
+    await axiosInstance.put(`/services/${serviceToEdit}`, updatedService);
     
     setServices((prev) =>
       prev.map((service) =>
