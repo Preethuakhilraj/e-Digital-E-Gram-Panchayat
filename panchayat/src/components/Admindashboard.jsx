@@ -138,11 +138,12 @@ const handleCreateService = async () => {
 const handleUpdateService = async () => {
   try {
     const updatedService = { name: serviceName, description: serviceDescription };
-    await axiosInstance.put(`/services/${serviceToEdit}`, updatedService);
-    
+
+    const { data } = await axiosInstance.put(`/services/${serviceToEdit}`, updatedService);
+
     setServices((prev) =>
       prev.map((service) =>
-        service._id === serviceToEdit ? { ...service, ...updatedService } : service
+        service._id === serviceToEdit ? data : service
       )
     );
 
@@ -153,6 +154,7 @@ const handleUpdateService = async () => {
     console.error("Error updating service:", error.response?.data || error.message);
   }
 };
+
 
 const handleUpdateStatus = async (id, newStatus, newRemarks) => {
   try {

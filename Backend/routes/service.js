@@ -22,7 +22,7 @@ router.put("/:id", async (req, res) => {
   try {
     const updatedService = await Service.findByIdAndUpdate(
       id,
-      { name, description, createdBy },
+      { name, description },  // Removed `createdBy`
       { new: true, runValidators: true }
     );
 
@@ -30,7 +30,7 @@ router.put("/:id", async (req, res) => {
       return res.status(404).json({ error: "Service not found" });
     }
 
-    res.status(200).json(updatedService);
+    res.status(200).json(updatedService);  // Send updated data back
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
