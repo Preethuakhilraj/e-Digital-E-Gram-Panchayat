@@ -112,91 +112,70 @@ const AdminDashboard = () => {
       )
     );
   };
-  const handleDeleteService = async () => {
-    try {
-      await fetch(`http://localhost:4000/services/${serviceToDelete}`, {
-        method: "DELETE",
-      });
-      setServices((prev) =>
-        prev.filter((service) => service._id !== serviceToDelete)
-      );
-      setConfirmDelete(false);
-    } catch (error) {
-      console.error("Error deleting service:", error);
-    }
-  };
+const handleDeleteService = async () => {
+  try {
+    await axiosInstance.delete(`/${serviceToDelete}`);
+    setServices((prev) => prev.filter((service) => service._id !== serviceToDelete));
+    setConfirmDelete(false);
+  } catch (error) {
+    console.error("Error deleting service:", error.response?.data || error.message);
+  }
+};
 
-  const handleCreateService = async () => {
-    try {
-      const newService = { name: serviceName, description: serviceDescription };
-      const response = await fetch("http://localhost:4000/services", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newService),
-      });
-      const createdService = await response.json();
-      setServices((prev) => [...prev, createdService]);
-      setServiceName("");
-      setServiceDescription("");
-      setOpenServiceDialog(false);
-    } catch (error) {
-      console.error("Error creating service:", error);
-    }
-  };
+const handleCreateService = async () => {
+  try {
+    const newService = { name: serviceName, description: serviceDescription };
+    const response = await axiosInstance.post("/", newService);
+    setServices((prev) => [...prev, response.data]); // Add new service to state
+    setServiceName("");
+    setServiceDescription("");
+    setOpenServiceDialog(false);
+  } catch (error) {
+    console.error("Error creating service:", error.response?.data || error.message);
+  }
+};
 
-  const handleUpdateService = async () => {
-    try {
-      const updatedService = {
-        name: serviceName,
-        description: serviceDescription,
-      };
-      await fetch(`http://localhost:4000/services/${serviceToEdit}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedService),
-      });
-      setServices((prev) =>
-        prev.map((service) =>
-          service._id === serviceToEdit
-            ? { ...service, ...updatedService }
-            : service
+const handleUpdateService = async () => {
+  try {
+    const updatedService = { name: serviceName, description: serviceDescription };
+    await axiosInstance.put(`/${serviceToEdit}`, updatedService);
+    
+    setServices((prev) =>
+      prev.map((service) =>
+        service._id === serviceToEdit ? { ...service, ...updatedService } : service
+      )
+    );
+
+    setServiceName("");
+    setServiceDescription("");
+    setOpenEditServiceDialog(false);
+  } catch (error) {
+    console.error("Error updating service:", error.response?.data || error.message);
+  }
+};
+
+const handleUpdateStatus = async (id, newStatus, newRemarks) => {
+  try {
+    const response = await axiosInstance.put(`/applications/${id}`, {
+      status: newStatus,
+      remarks: newRemarks,
+    });
+
+    if (response.status === 200) {
+      setApplications((prev) =>
+        prev.map((app) =>
+          app._id === id ? { ...app, status: newStatus, remarks: newRemarks } : app
         )
       );
-      setServiceName("");
-      setServiceDescription("");
-      setOpenEditServiceDialog(false);
-    } catch (error) {
-      console.error("Error updating service:", error);
+      console.log("Status updated successfully:", response.data);
+      alert("Successfully updated status!");
+    } else {
+      console.error("Failed to update status:", response.statusText);
     }
-  };
-
-  const handleUpdateStatus = async (id, newStatus, newRemarks) => {
-    try {
-      const response = await axiosInstance.put(`/applications/${id}`, {
-        status: newStatus,
-        remarks: newRemarks,
-      });
-  
-      if (response.status === 200) {
-        setApplications((prev) =>
-          prev.map((app) =>
-            app._id === id ? { ...app, status: newStatus, remarks: newRemarks } : app
-          )
-        );
-        console.log("Status updated successfully:", response.data);
-        alert("Successfully updated status!");
-      } else {
-        console.error("Failed to update status:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error updating status:", error.response?.data || error.message);
-    }
-  };
-  
+  } catch (error) {
+    console.error("Error updating status:", error.response?.data || error.message);
+  }
+};
 
 
   const filteredServices = services.filter(
