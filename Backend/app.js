@@ -8,7 +8,7 @@ const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 4000;
 
-
+app.use(express.json());
 // Middleware setup
 app.use(morgan('dev'));
 app.use(bodyParser.json());
