@@ -155,7 +155,6 @@ const handleUpdateService = async () => {
   }
 };
 
-
 const handleUpdateStatus = async (id, newStatus, newRemarks) => {
   try {
     const response = await axiosInstance.put(`/applications/${id}`, {
@@ -612,7 +611,6 @@ const handleUpdateStatus = async (id, newStatus, newRemarks) => {
           <TextField
             label="Service Name"
             fullWidth
-            value={serviceName}
             onChange={(e) => setServiceName(e.target.value)}
             margin="dense"
             sx={{ bgcolor: "white", color: "#c9e4d9", borderRadius: 1 }}
@@ -620,7 +618,6 @@ const handleUpdateStatus = async (id, newStatus, newRemarks) => {
           <TextField
             label="Description"
             fullWidth
-            value={serviceDescription}
             onChange={(e) => setServiceDescription(e.target.value)}
             margin="dense"
             multiline
