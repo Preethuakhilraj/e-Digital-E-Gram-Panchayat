@@ -54,6 +54,7 @@ const StaffDashboard = ({ userProfile }) => {
           const { data: servicesData } = await axiosInstance.get("/services/");
           setServices(servicesData);
     
+          console.log("servicess:", servicesData);
           // Fetch applications
           const { data: applicationsData } = await axiosInstance.get("/applications/");
           setApplications(applicationsData);

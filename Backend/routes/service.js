@@ -1,4 +1,4 @@
-const express = require("express");
+;const express = require("express");
 const Service = require("../model/service");
 
 const router = express.Router();
@@ -16,7 +16,7 @@ router.post("/", async (req, res) => {
   }
 });
 router.put("/:id", async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.params.id;
   const { name, description } = req.body;
 
   try {
