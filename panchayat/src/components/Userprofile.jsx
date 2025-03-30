@@ -21,7 +21,7 @@ const UserProfile = ({ userProfile, onUpdateProfile = () => {}, isLoading, error
 
   // Sync formData with updated userProfile props
   useEffect(() => {
-    if (userProfile && userProfile._id) {
+    if (userProfile && userProfile.id) {
       setFormData(userProfile);
     }
     console.log("Updated userProfile:", userProfile); // Debugging log
@@ -35,7 +35,7 @@ const UserProfile = ({ userProfile, onUpdateProfile = () => {}, isLoading, error
   };
 
   const handleSave = async () => {
-    if (!formData._id) {
+    if (!formData.id) {
       alert("User ID is missing. Unable to update profile.");
       console.error("Error: Missing user ID", formData);
       return;
