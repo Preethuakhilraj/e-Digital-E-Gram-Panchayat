@@ -10,23 +10,25 @@ const ApplicationStatus = () => {
   useEffect(() => {
     const fetchApplications = async () => {
       const storedUser = localStorage.getItem("user");
-      console.log(storedUser);
+      console.log("Stored User:", storedUser); // ✅ Debugging Log
+  
       if (!storedUser) {
         console.error("User not found in localStorage");
         return;
       }
+  
       const parsedUser = JSON.parse(storedUser);
-      const userId = parsedUser._id;
-
-      if (!userId) {
+      console.log("Parsed User:", parsedUser); // ✅ Debugging Log
+  
+      if (!parsedUser._id) {
         console.error("No user ID found, cannot fetch applications.");
         return;
       }
-
+  
       try {
-        const res = await axiosInstance.get(`/applications/${userId}`);
+        const res = await axiosInstance.get(`/applications/${parsedUser._id}`);
+        console.log("Applications API Response:", res.data); // ✅ Debugging Log
         setUserApplications(res.data);
-        console.log("Applications fetched:", res.data);
       } catch (error) {
         console.error(
           "Error fetching applications:",
@@ -34,9 +36,10 @@ const ApplicationStatus = () => {
         );
       }
     };
-
+  
     fetchApplications();
   }, []);
+  
   const getStatusChip = (status) => {
     switch (status) {
       case "Approved":

@@ -83,17 +83,16 @@ router.put("/:id", async (req, res) => {
 
 router.get("/:userId", async (req, res) => {
   try {
-    const userId = req.params.userId; 
+    const userId = req.params.userId;
     console.log("Fetching applications for user:", userId);
-    
-    // Filter applications based on userId
+
     const applications = await Application.find({ user: userId }).populate([
       { path: "user", select: "name" },
       { path: "service", select: "name" }
     ]);
 
-    if (applications.length === 0) {
-      return res.status(200).json({ message: "No applications yet" });
+    if (!applications || applications.length === 0) {
+      return res.status(200).json([]); // ✅ Always return an empty array
     }
 
     res.status(200).json(applications);
