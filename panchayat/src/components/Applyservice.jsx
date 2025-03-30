@@ -101,7 +101,7 @@ const ApplyService = () => {
   };
 
   const handleSubmitApplication = async () => {
-    setLoadingId(selectedService._id);
+    setLoadingId(selectedService.id);
 
     try {
       const formData = new FormData();
