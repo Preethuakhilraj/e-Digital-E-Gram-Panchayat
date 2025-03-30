@@ -42,7 +42,7 @@ const UserProfile = ({ userProfile, onUpdateProfile = () => {}, isLoading, error
     }
 
     try {
-      const response = await axiosInstance.put(`/auth/update-profile/${formData._id}`, formData);
+      const response = await axiosInstance.put(`/auth/update-profile/${formData.id}`, formData);
       onUpdateProfile(response.data);
       setIsEditing(false);
       alert("Profile successfully updated");
