@@ -35,7 +35,7 @@ const UserProfile = ({ userProfile, onUpdateProfile = () => {}, isLoading, error
   };
 
   const handleSave = async () => {
-    if (!formData.id) {
+    if (!formData._id) {
       alert("User ID is missing. Unable to update profile.");
       console.error("Error: Missing user ID", formData);
       return;
