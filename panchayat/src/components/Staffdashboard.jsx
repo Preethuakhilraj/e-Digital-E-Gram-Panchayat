@@ -48,25 +48,24 @@ const StaffDashboard = ({ userProfile }) => {
   const [open, setOpen] = useState(false);
   const [selectedApp, setSelectedApp] = useState(null);
   useEffect(() => {
-      const fetchData = async () => {
-        try {
-          // Fetch services
-          const { data: servicesData } = await axiosInstance.get("/services/");
-          setServices(servicesData);
-    
-          console.log("servicess:", servicesData);
-          // Fetch applications
-          const { data: applicationsData } = await axiosInstance.get("/applications/");
-          setApplications(applicationsData);
-    
-          console.log("Applications:", applicationsData);
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
-      };
-    
-      fetchData();
-    }, []);
+    const fetchData = async () => {
+      try {
+        const { data: servicesData } = await axiosInstance.get("/services/");
+        setServices(servicesData);
+        
+        const { data: applicationsData } = await axiosInstance.get("/applications/");
+        setApplications(applicationsData);
+        
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false); // Ensure loading state is updated
+      }
+    };
+  
+    fetchData();
+  }, []);
+  
 
   const handleNavigation = (section) => {
     if (section === "Logout") handleLogout();
