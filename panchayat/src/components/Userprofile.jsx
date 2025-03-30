@@ -14,16 +14,17 @@ import { Edit, Save, Cancel, CloudUpload } from "@mui/icons-material";
 import PropTypes from "prop-types";
 import axiosInstance from "./axiosinterceptor";
 
-// Ensure this is set correctly in Vercel
-
 const UserProfile = ({ userProfile, onUpdateProfile = () => {}, isLoading, error }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState(userProfile);
-  const [avatar, setAvatar] = useState("/user-avatar.png"); // Ensure avatar is in `public` folder
+  const [formData, setFormData] = useState({ ...userProfile });
+  const [avatar, setAvatar] = useState("/assets/user-avatar.png");
 
   // Sync formData with updated userProfile props
   useEffect(() => {
-    setFormData(userProfile);
+    if (userProfile && userProfile._id) {
+      setFormData(userProfile);
+    }
+    console.log("Updated userProfile:", userProfile); // Debugging log
   }, [userProfile]);
 
   const handleEditToggle = () => setIsEditing(!isEditing);
@@ -34,11 +35,14 @@ const UserProfile = ({ userProfile, onUpdateProfile = () => {}, isLoading, error
   };
 
   const handleSave = async () => {
-    try {
-      const response = await axiosInstance.put(`/auth/update-profile/${formData._id}`, formData, {
-        headers: { "Content-Type": "application/json" },
-      });
+    if (!formData._id) {
+      alert("User ID is missing. Unable to update profile.");
+      console.error("Error: Missing user ID", formData);
+      return;
+    }
 
+    try {
+      const response = await axiosInstance.put(`/auth/update-profile/${formData._id}`, formData);
       onUpdateProfile(response.data);
       setIsEditing(false);
       alert("Profile successfully updated");
@@ -150,11 +154,7 @@ const UserProfile = ({ userProfile, onUpdateProfile = () => {}, isLoading, error
                   </Button>
                 </>
               ) : (
-                <Button
-                  variant="contained"
-                  startIcon={<Edit />}
-                  onClick={handleEditToggle}
-                >
+                <Button variant="contained" startIcon={<Edit />} onClick={handleEditToggle}>
                   Edit Profile
                 </Button>
               )}
