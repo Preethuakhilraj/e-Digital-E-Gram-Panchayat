@@ -20,7 +20,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //   credentials: true, // Allow cookies if needed
 // }));
 app.use(cors({
-  origin: "https://e-digital-e-gram-panchayat-client.vercel.app", // Your frontend URL
+  origin: "https://e-digital-e-gram-panchayat-frontend.vercel.app", // Your frontend URL
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
