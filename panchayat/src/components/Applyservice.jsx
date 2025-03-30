@@ -64,14 +64,14 @@ const ApplyService = () => {
   
     try {
       const user = JSON.parse(storedUser);
-      if (!user._id) {
+      if (!user.id) {
         throw new Error("User ID missing");
       }
   
       setSelectedService(service);
       setApplicationData({
-        service: service._id,
-        user: user._id,  // Ensure this is correctly set
+        service: service.id,
+        user: user.id,  // Ensure this is correctly set
         status: "Pending",
         documents: [],
         details: "",
