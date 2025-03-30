@@ -20,13 +20,13 @@ const ApplicationStatus = () => {
       const parsedUser = JSON.parse(storedUser);
       console.log("Parsed User:", parsedUser); // ✅ Debugging Log
   
-      if (!parsedUser._id) {
+      if (!parsedUser.id) {
         console.error("No user ID found, cannot fetch applications.");
         return;
       }
   
       try {
-        const res = await axiosInstance.get(`/applications/${parsedUser._id}`);
+        const res = await axiosInstance.get(`/applications/${parsedUser.id}`);
         console.log("Applications API Response:", res.data); // ✅ Debugging Log
         setUserApplications(res.data);
       } catch (error) {
