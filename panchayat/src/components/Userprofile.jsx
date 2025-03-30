@@ -14,10 +14,12 @@ import { Edit, Save, Cancel, CloudUpload } from "@mui/icons-material";
 import PropTypes from "prop-types";
 import axiosInstance from "./axiosinterceptor";
 
+// Ensure this is set correctly in Vercel
+
 const UserProfile = ({ userProfile, onUpdateProfile = () => {}, isLoading, error }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState(userProfile);
-  const [avatar, setAvatar] = useState("/assets/user-avatar.png");
+  const [avatar, setAvatar] = useState("/user-avatar.png"); // Ensure avatar is in `public` folder
 
   // Sync formData with updated userProfile props
   useEffect(() => {
@@ -33,10 +35,13 @@ const UserProfile = ({ userProfile, onUpdateProfile = () => {}, isLoading, error
 
   const handleSave = async () => {
     try {
-      const response = await axiosInstance.put(`/auth/update-profile/${formData._id}`, formData);
+      const response = await axiosInstance.put(`/auth/update-profile/${formData._id}`, formData, {
+        headers: { "Content-Type": "application/json" },
+      });
+
       onUpdateProfile(response.data);
       setIsEditing(false);
-      alert(" Profile successfully updated");
+      alert("Profile successfully updated");
     } catch (error) {
       console.error("Profile Update Error:", error);
       alert("Error updating profile!");
