@@ -30,7 +30,7 @@ const ApplyService = () => {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const res = await axiosInstance.get("/services");
+        const res = await axiosInstance.get("/services/");
         setServices(res.data);
         setFilteredServices(res.data);
       } catch (error) {
