@@ -33,13 +33,14 @@ const ApplyService = () => {
         const res = await axiosInstance.get("/services/");
         setServices(res.data);
         setFilteredServices(res.data);
+    
       } catch (error) {
         console.error("Error fetching services:", error);
       }
     };
     fetchServices();
   }, []);
-
+  console.log(filteredServices);
   const handleSearch = (e) => {
     const term = e.target.value;
     setSearchTerm(term);
@@ -151,7 +152,7 @@ const ApplyService = () => {
       {filteredServices.length > 0 ? (
         filteredServices.map((service) => (
           <Paper
-            key={service._id}
+            key={service.id}
             sx={{
               padding: 2,
               marginBottom: 2,
@@ -165,9 +166,9 @@ const ApplyService = () => {
               variant="contained"
               color="primary"
               onClick={() => handleOpenModal(service)}
-              disabled={loadingId === service._id}
+              disabled={loadingId === service.id}
             >
-              {loadingId === service._id ? <CircularProgress size={24} color="inherit" /> : "Apply"}
+              {loadingId === service.id ? <CircularProgress size={24} color="inherit" /> : "Apply"}
             </Button>
           </Paper>
         ))
