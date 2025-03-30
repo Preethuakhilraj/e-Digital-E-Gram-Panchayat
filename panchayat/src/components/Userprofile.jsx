@@ -35,14 +35,14 @@ const UserProfile = ({ userProfile, onUpdateProfile = () => {}, isLoading, error
   };
 
   const handleSave = async () => {
-    if (!formData._id) {
+    if (!formData.id) {
       alert("User ID is missing. Unable to update profile.");
       console.error("Error: Missing user ID", formData);
       return;
     }
 
     try {
-      const response = await axiosInstance.put(`/auth/update-profile/${formData._id}`, formData);
+      const response = await axiosInstance.put(`/auth/update-profile/${formData.id}`, formData);
       onUpdateProfile(response.data);
       setIsEditing(false);
       alert("Profile successfully updated");
