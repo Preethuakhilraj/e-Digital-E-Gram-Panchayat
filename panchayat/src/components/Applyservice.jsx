@@ -62,7 +62,7 @@ const ApplyService = () => {
 
       setSelectedService(service);
       setApplicationData({
-        service: service.id,
+        service: service._id,
         user: user.id,
         status: "Pending",
         documents: [],
@@ -91,7 +91,7 @@ const ApplyService = () => {
       return;
     }
     
-    setLoadingId(selectedService.id);
+    setLoadingId(selectedService._id);
     
     try {
       const formData = new FormData();
@@ -142,10 +142,10 @@ const ApplyService = () => {
 
       {filteredServices.length > 0 ? (
         filteredServices.map((service) => (
-          <Paper key={service.id} sx={{ padding: 2, marginBottom: 2, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <Paper key={service._id} sx={{ padding: 2, marginBottom: 2, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <Typography>{service.name}</Typography>
-            <Button variant="contained" color="primary" onClick={() => handleOpenModal(service)} disabled={loadingId === service.id}>
-              {loadingId === service.id ? <CircularProgress size={24} color="inherit" /> : "Apply"}
+            <Button variant="contained" color="primary" onClick={() => handleOpenModal(service)} disabled={loadingId === service._id}>
+              {loadingId === service._id ? <CircularProgress size={24} color="inherit" /> : "Apply"}
             </Button>
           </Paper>
         ))
