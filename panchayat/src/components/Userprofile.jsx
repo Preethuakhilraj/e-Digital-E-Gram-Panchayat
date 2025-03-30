@@ -14,28 +14,27 @@ import { Edit, Save, Cancel, CloudUpload } from "@mui/icons-material";
 import PropTypes from "prop-types";
 import axiosInstance from "./axiosinterceptor";
 
-const UserProfile = ({ userProfile = {}, onUpdateProfile = () => {}, isLoading, error }) => {
+const UserProfile = ({ userProfile, onUpdateProfile = () => {}, isLoading, error }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({ ...userProfile });
   const [avatar, setAvatar] = useState("/assets/user-avatar.png");
 
   // Sync formData with updated userProfile props
   useEffect(() => {
     if (userProfile && userProfile._id) {
-      setFormData({ ...userProfile });
+      setFormData(userProfile);
     }
+    console.log("Updated userProfile:", userProfile); // Debugging log
   }, [userProfile]);
 
   const handleEditToggle = () => setIsEditing(!isEditing);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSave = async () => {
-    console.log("Saving user data:", formData); // Debugging log
-
     if (!formData._id) {
       alert("User ID is missing. Unable to update profile.");
       console.error("Error: Missing user ID", formData);
