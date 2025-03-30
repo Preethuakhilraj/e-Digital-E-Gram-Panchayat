@@ -55,24 +55,36 @@ const ApplyService = () => {
 
   const handleOpenModal = (service) => {
     const storedUser = localStorage.getItem("user");
-
+  
     if (!storedUser) {
       alert("You must be logged in to apply for a service.");
       navigate("/login");
       return;
     }
-
-    const user = JSON.parse(storedUser);
-    setSelectedService(service);
-    setApplicationData({
-      service: service._id,
-      user: user._id,
-      status: "Pending",
-      documents: [],
-      details: "",
-    });
-    setOpen(true);
+  
+    try {
+      const user = JSON.parse(storedUser);
+      if (!user._id) {
+        throw new Error("User ID missing");
+      }
+  
+      setSelectedService(service);
+      setApplicationData({
+        service: service._id,
+        user: user._id,  // Ensure this is correctly set
+        status: "Pending",
+        documents: [],
+        details: "",
+      });
+      setOpen(true);
+    } catch (error) {
+      console.error("Error parsing user data:", error);
+      alert("User data is invalid. Please log in again.");
+      localStorage.removeItem("user"); // Clear invalid data
+      navigate("/login");
+    }
   };
+  
 
   const handleChange = (e) => {
     setApplicationData({
