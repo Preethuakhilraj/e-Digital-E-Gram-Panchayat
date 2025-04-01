@@ -26,7 +26,7 @@ const ApplicationStatus = () => {
       }
   
       try {
-        const res = await axiosInstance.get(`/applications/${parsedUser.id}`);
+        const res = await axiosInstance.get(`/applications/${parsedUser._id}`);
         console.log("Applications API Response:", res.data); // ✅ Debugging Log
         setUserApplications(res.data);
       } catch (error) {
