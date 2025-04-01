@@ -143,7 +143,7 @@ const handleUpdateService = async () => {
 
     setServices((prev) =>
       prev.map((service) =>
-        service.id === serviceToEdit ? data : service
+        service._id === serviceToEdit ? data : service
       )
     );
 
