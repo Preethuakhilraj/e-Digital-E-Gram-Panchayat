@@ -40,7 +40,7 @@ console.log(" req",req.body);
   }
 });
 
-router.get("/api/get", async (req, res) => {
+router.get("/applicationlist", async (req, res) => {
   try {
     const applications = await Application.find({})
       .populate([
