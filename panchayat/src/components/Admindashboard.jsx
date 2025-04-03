@@ -113,7 +113,7 @@ const AdminDashboard = () => {
   const handleCreateService = async () => {
     try {
       const newService = { name: serviceName, description: serviceDescription };
-      const response = await fetch("http://localhost:4000/services", {
+      const response = await fetch("http://localhost:4000/services/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
