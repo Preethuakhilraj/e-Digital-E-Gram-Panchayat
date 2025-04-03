@@ -216,7 +216,7 @@ const AdminDashboard = () => {
           {["Services List", "Application List"].map((text) => (
             <ListItem button key={text} onClick={() => handleNavigation(text)}>
               <ListItemIcon sx={{ color: "white" }}>
-                {text === " Services List" ? <Visibility /> : <AssignmentTurnedIn />}
+                {text === " Application List" ? <Visibility /> : <AssignmentTurnedIn />}
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
