@@ -73,8 +73,7 @@ const AdminDashboard = () => {
         // Fetch applications
         const { data: applicationsData } = await axiosInstance.get("/applications/get");
         setApplications(applicationsData);
-  
-        console.log("Applications:", applicationsData);
+          console.log("Applications:", applicationsData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }

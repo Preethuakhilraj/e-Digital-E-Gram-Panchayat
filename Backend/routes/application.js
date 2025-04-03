@@ -89,25 +89,25 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-router.get("/:userId", async (req, res) => {
-  try {
-    const userId = req.params.userId;
-    console.log("Fetching applications for user:", userId);
+// router.get("/:userId", async (req, res) => {
+//   try {
+//     const userId = req.params.userId;
+//     console.log("Fetching applications for user:", userId);
 
-    const applications = await Application.find({ user: userId }).populate([
-      { path: "user", select: "name" },
-      { path: "service", select: "name" }
-    ]);
+//     const applications = await Application.find({ user: userId }).populate([
+//       { path: "user", select: "name" },
+//       { path: "service", select: "name" }
+//     ]);
 
-    if (!applications || applications.length === 0) {
-      return res.status(200).json([]); // ✅ Always return an empty array
-    }
+//     if (!applications || applications.length === 0) {
+//       return res.status(200).json([]); // ✅ Always return an empty array
+//     }
 
-    res.status(200).json(applications);
-  } catch (err) {
-    console.error("Error fetching applications:", err);
-    res.status(500).json({ error: "Failed to fetch applications", details: err.message });
-  }
-});
+//     res.status(200).json(applications);
+//   } catch (err) {
+//     console.error("Error fetching applications:", err);
+//     res.status(500).json({ error: "Failed to fetch applications", details: err.message });
+//   }
+// });
 
 module.exports = router;
