@@ -15,26 +15,19 @@ router.post("/", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-router.put("/:id", async (req, res) => {
-  const { id } = req.params;
-  const { name, description, createdBy } = req.body;
-
+app.put('/services/:id', async (req, res) => {
   try {
-    const updatedService = await Service.findByIdAndUpdate(
-      id,
-      { name, description, createdBy },
-      { new: true, runValidators: true }
-    );
-
-    if (!updatedService) {
-      return res.status(404).json({ error: "Service not found" });
-    }
-
-    res.status(200).json(updatedService);
+      const { id } = req.params;
+      const updatedService = await Service.findByIdAndUpdate(id, req.body, { new: true });
+      if (!updatedService) {
+          return res.status(404).json({ error: 'Service not found' });
+      }
+      res.json(updatedService);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+      res.status(500).json({ error: 'Server error' });
   }
 });
+
 
 
 router.get("/", async (req, res) => {
