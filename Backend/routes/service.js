@@ -17,32 +17,25 @@ router.post("/", async (req, res) => {
 });
 router.put("/:id", async (req, res) => {
   const { id } = req.params;
-  const { name, description } = req.body;
+  const { name, description, createdBy } = req.body;
 
   try {
-    // Validate MongoDB ObjectId format
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ error: "Invalid ID format" });
-    }
+    const updatedService = await Service.findByIdAndUpdate(
+      id,
+      { name, description, createdBy },
+      { new: true, runValidators: true }
+    );
 
-    // Find the service first
-    const service = await Service.findById(id);
-    if (!service) {
+    if (!updatedService) {
       return res.status(404).json({ error: "Service not found" });
     }
-
-    // Update fields
-    service.name = name || service.name;
-    service.description = description || service.description;
-
-    // Save the updated document
-    const updatedService = await service.save();
 
     res.status(200).json(updatedService);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
+
 
 router.get("/", async (req, res) => {
   try {
