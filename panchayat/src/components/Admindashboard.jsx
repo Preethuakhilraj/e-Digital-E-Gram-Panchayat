@@ -64,11 +64,11 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const servicesRes = await fetch("http://localhost:4000/services");
+        const servicesRes = await fetch("http://localhost:4000/services/");
         const servicesData = await servicesRes.json();
         setServices(servicesData);
 
-        const applicationsRes = await fetch("http://localhost:4000/applications");
+        const applicationsRes = await fetch("http://localhost:4000/applications/");
         const applicationsData = await applicationsRes.json();
         setApplications(applicationsData);
       } catch (error) {
