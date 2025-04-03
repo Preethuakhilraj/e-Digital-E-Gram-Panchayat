@@ -112,20 +112,6 @@ const AdminDashboard = () => {
       console.error("Error deleting service:", error.response?.data || error.message);
     }
   };
-  
-  const handleCreateService = async () => {
-    try {
-      const newService = { name: serviceName, description: serviceDescription };
-      const response = await axiosInstance.post("/services/", newService);
-      setServices((prev) => [...prev, response.data]); // Add new service to state
-      setServiceName("");
-      setServiceDescription("");
-      setOpenServiceDialog(false);
-    } catch (error) {
-      console.error("Error creating service:", error.response?.data || error.message);
-    }
-  };
-  
   const handleUpdateService = async () => {
     try {
       const updatedService = { name: serviceName, description: serviceDescription };
@@ -144,10 +130,24 @@ const AdminDashboard = () => {
       console.error("Error updating service:", error.response?.data || error.message);
     }
   };
+  const handleCreateService = async () => {
+    try {
+      const newService = { name: serviceName, description: serviceDescription };
+      const response = await axiosInstance.post("/services/", newService);
+      setServices((prev) => [...prev, response.data]); // Add new service to state
+      setServiceName("");
+      setServiceDescription("");
+      setOpenServiceDialog(false);
+    } catch (error) {
+      console.error("Error creating service:", error.response?.data || error.message);
+    }
+  };
+  
+
   
   const handleUpdateStatus = async (id, newStatus, newRemarks) => {
     try {
-      const response = await axiosInstance.put(`/applications/${id}`, {
+      const response = await axiosInstance.put(`/applications/user/${id}`, {
         status: newStatus,
         remarks: newRemarks,
       });
