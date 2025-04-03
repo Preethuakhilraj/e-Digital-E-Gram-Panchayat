@@ -35,6 +35,8 @@ import {
   Fade,
   Modal,
   Backdrop,
+  Stack,
+  Grid,
 } from "@mui/material";
 import {
   Edit,
@@ -161,7 +163,7 @@ const AdminDashboard = () => {
 
       setApplications((prev) =>
         prev.map((app) => (app._id === id ? { ...app, status: newStatus, remarks: remarks } : app))
-      );
+      ); console.log(applications)
     } catch (error) {
       console.error("Error updating status:", error);
     }
@@ -229,77 +231,90 @@ const AdminDashboard = () => {
         </Drawer>
 
       {/* Main Content */}
-      <Box sx={{ mt: 3 }}>
+      {/* <Box sx={{ mt: 3 }}>
   <Typography variant="h5" sx={{ color: "#c9e4d9", marginBottom: 3 }}>
     {selectedSection}
-  </Typography>
-  <Button
-    variant="contained"
-    color="success"
-    onClick={() => setOpenServiceDialog(true)}
-    startIcon={<AddBox />}
-    sx={{
-      position: "absolute",
-      top: 110,
-      right: 35,
-      marginBottom: 2,
-      flexGrow: 1,
-      padding: 2,
-      marginLeft: `${drawerWidth}px`,
-      backgroundColor: "#388e3c",
-      '&:hover': { backgroundColor: "#2c6c2d" }
-    }}
-  >
-    Add New Service
-  </Button>
-
+  </Typography> */}
+  
   {selectedSection === "Services List" && (
-    <TableContainer component={Paper} sx={{ borderRadius: 2, boxShadow: 3, backgroundColor: "#2c3e50" }}>
+  <Box sx={{ padding: 3, backgroundColor:" #bfbfbf" ,width:"90vw"}}>
+    {/* Header with Button */}
+    <Grid container justifyContent="space-between"  alignItems="center" sx={{ marginBottom: 2 }}>
+      <Typography variant="h5" sx={{ fontWeight: "bold", color: "##000000" }}>
+        Services List
+      </Typography>
+      <Button
+        variant="contained"
+        color="success"
+        onClick={() => setOpenServiceDialog(true)}
+        startIcon={<AddBox />}
+        sx={{
+          padding: "10px 20px",
+          fontSize: "1rem",
+          backgroundColor: "#2d6a4f",
+          borderRadius: "8px",
+          boxShadow: 3,
+          "&:hover": { backgroundColor: "#1b4332" },
+        }}
+      >
+        Add New Service
+      </Button>
+    </Grid>
+
+    {/* Table Container */}
+    <TableContainer component={Paper} sx={{ borderRadius: 3, boxShadow: 4, backgroundColor: "#1b4332" }}>
       <Table>
-        <TableHead sx={{ bgcolor: "#2e3b32", color: "#fff" }}>
+        <TableHead sx={{ bgcolor: "#2d6a4f" }}>
           <TableRow>
-            <TableCell sx={{ fontWeight: "bold", color: "#b1c9a7" }}>Service Name</TableCell>
-            <TableCell sx={{ fontWeight: "bold", color: "#b1c9a7" }}>Description</TableCell>
-            <TableCell sx={{ fontWeight: "bold", color: "#b1c9a7" }}>Actions</TableCell>
+            <TableCell sx={{ fontWeight: "bold", color: "#f8f9fa", fontSize: "1rem" }}>Service Name</TableCell>
+            <TableCell sx={{ fontWeight: "bold", color: "#f8f9fa", fontSize: "1rem" }}>Description</TableCell>
+            <TableCell sx={{ fontWeight: "bold", color: "#f8f9fa", fontSize: "1rem", textAlign: "center" }}>
+              Actions
+            </TableCell>
           </TableRow>
         </TableHead>
+
         <TableBody>
           {filteredServices.length > 0 ? (
             filteredServices.map((service) => (
-              <TableRow key={service._id}>
-                <TableCell sx={{ color: "#b1c9a7" }}>{service.name}</TableCell>
-                <TableCell sx={{ color: "#b1c9a7" }}>{service.description}</TableCell>
-                <TableCell>
-                  <Tooltip title="Update Service" arrow>
-                    <IconButton
-                      color="success"
-                      onClick={() => {
-                        setServiceName(service.name);
-                        setServiceDescription(service.description);
-                        setServiceToEdit(service._id);
-                        setOpenEditServiceDialog(true);
-                      }}
-                    >
-                      <Edit />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title="Delete Service" arrow>
-                    <IconButton
-                      color="error"
-                      onClick={() => {
-                        setServiceToDelete(service._id);
-                        setConfirmDelete(true);
-                      }}
-                    >
-                      <Delete />
-                    </IconButton>
-                  </Tooltip>
+              <TableRow key={service._id} hover sx={{ "&:hover": { backgroundColor: "#2d6a4f" } }}>
+                <TableCell sx={{ color: "#f8f9fa", fontSize: "0.95rem" }}>{service.name}</TableCell>
+                <TableCell sx={{ color: "#f8f9fa", fontSize: "0.95rem" }}>{service.description}</TableCell>
+                <TableCell align="center">
+                  <Stack direction="row" spacing={1} justifyContent="center">
+                    <Tooltip title="Edit Service" arrow>
+                      <IconButton
+                        color="primary"
+                        sx={{ bgcolor: "#40916c", "&:hover": { bgcolor: "#1b4332" }, color: "#fff" }}
+                        onClick={() => {
+                          setServiceName(service.name);
+                          setServiceDescription(service.description);
+                          setServiceToEdit(service._id);
+                          setOpenEditServiceDialog(true);
+                        }}
+                      >
+                        <Edit />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Delete Service" arrow>
+                      <IconButton
+                        color="error"
+                        sx={{ bgcolor: "#d62828", "&:hover": { bgcolor: "#9b2226" }, color: "#fff" }}
+                        onClick={() => {
+                          setServiceToDelete(service._id);
+                          setConfirmDelete(true);
+                        }}
+                      >
+                        <Delete />
+                      </IconButton>
+                    </Tooltip>
+                  </Stack>
                 </TableCell>
               </TableRow>
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={3} align="center" sx={{ color: "#d6e1d3" }}>
+              <TableCell colSpan={3} align="center" sx={{ color: "#f8f9fa", padding: 3, fontSize: "1rem" }}>
                 No services available
               </TableCell>
             </TableRow>
@@ -307,23 +322,25 @@ const AdminDashboard = () => {
         </TableBody>
       </Table>
     </TableContainer>
-  )}
-
+  </Box>
+)}
   {selectedSection === "Application List" && (
-    <Box p={3}>
-      <Typography variant="h5" sx={{ fontWeight: "bold", mb: 2, color: "#b1c9a7" }}>
-        Application List
+  <Box sx={{ padding: 3, backgroundColor:" #bfbfbf" ,width:"90vw"}}>
+    {/* Header with Button */}
+    <Grid container justifyContent="space-between"  alignItems="center" sx={{ marginBottom: 2 }}>
+      <Typography variant="h5" sx={{ fontWeight: "bold", color: "##000000" }}>
+        Services List
       </Typography>
-
-      <TableContainer component={Paper} sx={{ borderRadius: 2, boxShadow: 3, backgroundColor: "#2c3e50" }}>
-        <Table>
-          <TableHead sx={{ bgcolor: "#2e3b32", color: "#fff" }}>
-            <TableRow>
-              <TableCell sx={{ fontWeight: "bold", color: "#b1c9a7" }}>Applicant</TableCell>
-              <TableCell sx={{ fontWeight: "bold", color: "#b1c9a7" }}>Service</TableCell>
-              <TableCell sx={{ fontWeight: "bold", color: "#b1c9a7" }}>Status</TableCell>
-              <TableCell sx={{ fontWeight: "bold", color: "#b1c9a7" }}>Remarks</TableCell>
-              <TableCell sx={{ fontWeight: "bold", color: "#b1c9a7", textAlign: "center" }}>Actions</TableCell>
+         </Grid>
+         <TableContainer component={Paper} sx={{ borderRadius: 3, boxShadow: 4, backgroundColor: "#1b4332" }}>
+      <Table>
+        <TableHead sx={{ bgcolor: "#2d6a4f" }}>
+          <TableRow>
+              <TableCell  sx={{ fontWeight: "bold", color: "#f8f9fa", fontSize: "1rem" }}>Applicant</TableCell>
+              <TableCell  sx={{ fontWeight: "bold", color: "#f8f9fa", fontSize: "1rem" }}>Service</TableCell>
+              <TableCell sx={{ fontWeight: "bold", color: "#f8f9fa", fontSize: "1rem" }}>Status</TableCell>
+              <TableCell sx={{ fontWeight: "bold", color: "#f8f9fa", fontSize: "1rem" }}>Remarks</TableCell>
+              <TableCell sx={{ fontWeight: "bold", color: "#f8f9fa", fontSize: "1rem" }}>Actions</TableCell>
             </TableRow>
           </TableHead>
 
@@ -331,8 +348,8 @@ const AdminDashboard = () => {
             {applications.length > 0 ? (
               applications.map((app) => (
                 <TableRow key={app._id} hover>
-                  <TableCell sx={{ color: "#b1c9a7" }}>{app.userName}</TableCell>
-                  <TableCell sx={{ color: "#b1c9a7" }}>{app.serviceName}</TableCell>
+                  <TableCell sx={{ color: "#f8f9fa" }}>{app.user.name}</TableCell>
+                  <TableCell sx={{ color: "#f8f9fa" }}>{app.service.name}</TableCell>
                   <TableCell>
                     <TextField
                       select
@@ -386,7 +403,7 @@ const AdminDashboard = () => {
               Application Details
             </Typography>
             {selectedApp && (
-              <>
+              <> 
                 <Typography sx={{ color: "#c9e4d9" }}><strong>Applicant:</strong> {selectedApp.userName}</Typography>
                 <Typography sx={{ color: "#c9e4d9" }}><strong>Service:</strong> {selectedApp.serviceName}</Typography>
                 <Typography sx={{ color: "#c9e4d9" }}><strong>Status:</strong> {selectedApp.status}</Typography>
@@ -480,7 +497,8 @@ const AdminDashboard = () => {
       </Button>
     </DialogActions>
   </Dialog>
-</Box></Box>
+</Box>
+// </Box>
   );
 };
 
