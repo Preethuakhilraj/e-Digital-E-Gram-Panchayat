@@ -40,7 +40,7 @@ console.log(" req",req.body);
   }
 });
 
-router.get("/get", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const applications = await Application.find();
     res.json(applications);
