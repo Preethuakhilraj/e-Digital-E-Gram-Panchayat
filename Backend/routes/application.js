@@ -51,18 +51,18 @@ router.get("/", async (req, res) => {
 });
 
 
-router.get("/getall", async (req, res) => {
+router.get("/api/get", async (req, res) => {
   try {
-    const applications = await Application.find().populate([
-      { path: 'user', select: 'name' },
-      { path: 'service', select: 'name description' },
-      { path: 'createdAt', select: 'createdAt' },
-    ]);
+    const applications = await Application.find({})
+      .populate([
+        { path: 'user', select: 'name' },
+        { path: 'service', select: 'name description' }
+      ]);
 
-    // Send the applications data as a JSON response
     res.status(200).json(applications);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Error fetching applications:", error);
+    res.status(500).json({ error: "Failed to fetch applications", details: error.message });
   }
 });
 
