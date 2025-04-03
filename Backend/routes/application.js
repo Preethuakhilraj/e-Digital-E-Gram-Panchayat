@@ -40,7 +40,15 @@ console.log(" req",req.body);
   }
 });
 
-
+router.get("/get", async (req, res) => {
+  try {
+    const applications = await Application.find();
+    res.json(applications);
+    console.log(applications)
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 
 router.get("/", async (req, res) => {
