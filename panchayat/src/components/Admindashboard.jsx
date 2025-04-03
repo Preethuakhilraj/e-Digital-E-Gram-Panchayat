@@ -104,79 +104,76 @@ const AdminDashboard = () => {
     localStorage.removeItem("user");
     navigate("/");
   };
-
   const handleDeleteService = async () => {
     try {
-      await fetch(`http://localhost:4000/services/${serviceToDelete}`, { method: "DELETE" });
+      await axiosInstance.delete(`/services/${serviceToDelete}`);
       setServices((prev) => prev.filter((service) => service._id !== serviceToDelete));
       setConfirmDelete(false);
     } catch (error) {
-      console.error("Error deleting service:", error);
+      console.error("Error deleting service:", error.response?.data || error.message);
     }
   };
-
+  
   const handleCreateService = async () => {
     try {
       const newService = { name: serviceName, description: serviceDescription };
-      const response = await fetch("http://localhost:4000/services/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newService),
-      });
-      const createdService = await response.json();
-      setServices((prev) => [...prev, createdService]);
+      const response = await axiosInstance.post("/services/", newService);
+      setServices((prev) => [...prev, response.data]); // Add new service to state
       setServiceName("");
       setServiceDescription("");
       setOpenServiceDialog(false);
     } catch (error) {
-      console.error("Error creating service:", error);
+      console.error("Error creating service:", error.response?.data || error.message);
     }
   };
-
+  
   const handleUpdateService = async () => {
     try {
       const updatedService = { name: serviceName, description: serviceDescription };
-      await fetch(`http://localhost:4000/services/${serviceToEdit}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedService),
-      });
+      await axiosInstance.put(`/services/${serviceToEdit}`, updatedService);
+      
       setServices((prev) =>
         prev.map((service) =>
           service._id === serviceToEdit ? { ...service, ...updatedService } : service
         )
       );
+  
       setServiceName("");
       setServiceDescription("");
       setOpenEditServiceDialog(false);
     } catch (error) {
-      console.error("Error updating service:", error);
+      console.error("Error updating service:", error.response?.data || error.message);
     }
   };
-
-  const handleUpdateStatus = async (id, newStatus, remarks) => {
+  
+  const handleUpdateStatus = async (id, newStatus, newRemarks) => {
     try {
-      await fetch(`http://localhost:4000/applications/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: newStatus, remarks: remarks }),
+      const response = await axiosInstance.put(`/applications/${id}`, {
+        status: newStatus,
+        remarks: newRemarks,
       });
-
-      setApplications((prev) =>
-        prev.map((app) => (app._id === id ? { ...app, status: newStatus, remarks: remarks } : app))
-      ); console.log(applications)
+  
+      if (response.status === 200) {
+        setApplications((prev) =>
+          prev.map((app) =>
+            app._id === id ? { ...app, status: newStatus, remarks: newRemarks } : app
+          )
+        );
+        console.log("Status updated successfully:", response.data);
+        alert("Successfully updated status!");
+      } else {
+        console.error("Failed to update status:", response.statusText);
+      }
     } catch (error) {
-      console.error("Error updating status:", error);
+      console.error("Error updating status:", error.response?.data || error.message);
     }
   };
-
-  const filteredServices = services.filter((service) =>
-    service.name.toLowerCase()
-  );
+  
+  
+    const filteredServices = services.filter(
+      (service) => service.name.toLowerCase() || service.category.toLowerCase()
+    );
+  
 
  
   return (
