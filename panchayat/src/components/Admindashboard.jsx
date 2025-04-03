@@ -349,14 +349,14 @@ const AdminDashboard = () => {
           <TableBody>
             {applications.length > 0 ? (
               applications.map((app) => (
-                <TableRow key={app.id} hover>
+                <TableRow key={app._id} hover>
                   <TableCell sx={{ color: "#f8f9fa" }}>{app.user.name}</TableCell>
                   <TableCell sx={{ color: "#f8f9fa" }}>{app.service.name}</TableCell>
                   <TableCell>
                     <TextField
                       select
                       value={app.status}
-                      onChange={(e) => handleUpdateStatus(app.id, e.target.value, app.remarks)}
+                      onChange={(e) => handleUpdateStatus(app._id, e.target.value, app.remarks)}
                       variant="outlined"
                       size="small"
                       sx={{ width: 120 }}
@@ -371,7 +371,7 @@ const AdminDashboard = () => {
                   <TableCell>
                     <TextField
                       value={app.remarks}
-                      onChange={(e) => handleUpdateStatus(app.id, app.status, e.target.value)}
+                      onChange={(e) => handleUpdateStatus(app._id, app.status, e.target.value)}
                       variant="outlined"
                       size="small"
                       sx={{ width: "100%" }}
