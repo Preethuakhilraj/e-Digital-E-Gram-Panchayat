@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Drawer,
   List,
@@ -12,7 +12,7 @@ import {
   TextField,
 } from "@mui/material";
 import { Visibility, AssignmentTurnedIn, Delete, Edit } from "@mui/icons-material";
-import axiosInstance from "../utils/axiosInstance";
+import axiosInstance from "../components/axiosinterceptor";
 
 const AdminDashboard = () => {
   const [services, setServices] = useState([]);
