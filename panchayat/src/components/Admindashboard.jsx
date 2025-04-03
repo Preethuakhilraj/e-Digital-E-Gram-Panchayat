@@ -44,6 +44,7 @@ import {
   AddBox,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "./axiosinterceptor";
 
 const drawerWidth = 240;
 
@@ -60,24 +61,28 @@ const AdminDashboard = () => {
   const [serviceToDelete, setServiceToDelete] = useState(null);
   const navigate = useNavigate();
 
+
   // Fetch Services and Applications
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const servicesRes = await fetch("http://localhost:4000/services/");
-        const servicesData = await servicesRes.json();
+        // Fetch services
+        const { data: servicesData } = await axiosInstance.get("/services/");
         setServices(servicesData);
-
-        const applicationsRes = await fetch("http://localhost:4000/applications/");
-        const applicationsData = await applicationsRes.json();
+  
+        // Fetch applications
+        const { data: applicationsData } = await axiosInstance.get("/applications/");
         setApplications(applicationsData);
+  
+        console.log("Applications:", applicationsData);
       } catch (error) {
         console.error("Error fetching data:", error);
-      } 
+      }
     };
-
+  
     fetchData();
   }, []);
+  
   const [open, setOpen] = useState(false);
   const [selectedApp, setSelectedApp] = useState(null);
 
