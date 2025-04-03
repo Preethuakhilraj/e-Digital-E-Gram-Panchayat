@@ -51,20 +51,20 @@ router.get("/get", async (req, res) => {
 });
 
 
-// router.get("user/", async (req, res) => {
-//   try {
-//     const applications = await Application.find().populate([
-//       { path: 'user', select: 'name' },
-//       { path: 'service', select: 'name description' },
-//       { path: 'createdAt', select: 'createdAt' },
-//     ]);
+router.get("/getall", async (req, res) => {
+  try {
+    const applications = await Application.find().populate([
+      { path: 'user', select: 'name' },
+      { path: 'service', select: 'name description' },
+      { path: 'createdAt', select: 'createdAt' },
+    ]);
 
-//     // Send the applications data as a JSON response
-//     res.status(200).json(applications);
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// });
+    // Send the applications data as a JSON response
+    res.status(200).json(applications);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // Update Application Status
 router.put("user/:id", async (req, res) => {
