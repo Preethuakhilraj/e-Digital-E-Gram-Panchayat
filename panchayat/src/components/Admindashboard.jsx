@@ -331,7 +331,7 @@ const AdminDashboard = () => {
     {/* Header with Button */}
     <Grid container justifyContent="space-between"  alignItems="center" sx={{ marginBottom: 2 }}>
       <Typography variant="h5" sx={{ fontWeight: "bold", color: "##000000" }}>
-        Services List
+       Applications List
       </Typography>
          </Grid>
          <TableContainer component={Paper} sx={{ borderRadius: 3, boxShadow: 4, backgroundColor: "#1b4332" }}>
@@ -349,14 +349,14 @@ const AdminDashboard = () => {
           <TableBody>
             {applications.length > 0 ? (
               applications.map((app) => (
-                <TableRow key={app._id} hover>
+                <TableRow key={app.id} hover>
                   <TableCell sx={{ color: "#f8f9fa" }}>{app.user.name}</TableCell>
                   <TableCell sx={{ color: "#f8f9fa" }}>{app.service.name}</TableCell>
                   <TableCell>
                     <TextField
                       select
                       value={app.status}
-                      onChange={(e) => handleUpdateStatus(app._id, e.target.value, app.remarks)}
+                      onChange={(e) => handleUpdateStatus(app.id, e.target.value, app.remarks)}
                       variant="outlined"
                       size="small"
                       sx={{ width: 120 }}
@@ -371,7 +371,7 @@ const AdminDashboard = () => {
                   <TableCell>
                     <TextField
                       value={app.remarks}
-                      onChange={(e) => handleUpdateStatus(app._id, app.status, e.target.value)}
+                      onChange={(e) => handleUpdateStatus(app.id, app.status, e.target.value)}
                       variant="outlined"
                       size="small"
                       sx={{ width: "100%" }}
