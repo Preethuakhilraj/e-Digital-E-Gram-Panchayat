@@ -71,7 +71,7 @@ const AdminDashboard = () => {
         setServices(servicesData);
   
         // Fetch applications
-        const { data: applicationsData } = await axiosInstance.get("/applications/get");
+        const { data: applicationsData } = await axiosInstance.get("/applications/");
         setApplications(applicationsData);
   
         console.log("Applications:", applicationsData);
