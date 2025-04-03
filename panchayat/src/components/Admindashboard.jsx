@@ -71,7 +71,7 @@ const AdminDashboard = () => {
         setServices(servicesData);
   
         // Fetch applications
-        const { data: applicationsData } = await axiosInstance.get("/applications/");
+        const { data: applicationsData } = await axiosInstance.get("/applications/getall");
         setApplications(applicationsData);
           console.log("Applications:", applicationsData);
       } catch (error) {
@@ -216,7 +216,7 @@ const AdminDashboard = () => {
           {["Services List", "Application List"].map((text) => (
             <ListItem button key={text} onClick={() => handleNavigation(text)}>
               <ListItemIcon sx={{ color: "white" }}>
-                {text === " Application List" ? <Visibility /> : <AssignmentTurnedIn />}
+                {text === " Services List" ? <Visibility /> : <AssignmentTurnedIn />}
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
