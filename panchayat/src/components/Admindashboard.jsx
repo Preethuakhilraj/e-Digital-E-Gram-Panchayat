@@ -49,7 +49,7 @@ import axiosInstance from "./axiosinterceptor";
 const drawerWidth = 240;
 
 const AdminDashboard = () => {
-  const [selectedSection, setSelectedSection] = useState("Service List");
+  const [selectedSection, setSelectedSection] = useState("");
   const [services, setServices] = useState([]);
   const [applications, setApplications] = useState([]);
   const [openServiceDialog, setOpenServiceDialog] = useState(false);
