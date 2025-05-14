@@ -67,11 +67,11 @@ const AdminDashboard = () => {
     const fetchData = async () => {
       try {
         // Fetch services
-        const { data: servicesData } = await axiosInstance.get("/services/");
+        const { servicesData } = await axiosInstance.get("/services/");
         setServices(servicesData);
   
         // Fetch applications
-        const { data: applicationsData } = await axiosInstance.get("/applications/applicationlist");
+        const { applicationsData } = await axiosInstance.get("/applications/applicationlist");
         setApplications(applicationsData);
           console.log("Applications:", applicationsData);
       } catch (error) {
